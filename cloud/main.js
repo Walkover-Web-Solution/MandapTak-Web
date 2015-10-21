@@ -1,4 +1,5 @@
 require('cloud/app.js');
+require('cloud/admin.js');
 var registerUser = require("cloud/registerUser.js");
 var filterProfileObj = require("cloud/filterProfiles.js");
 var profileObj = require("cloud/profiles.js");
@@ -15,49 +16,7 @@ layer.initialize(layerProviderID, layerKeyID, privateKey);
 
 
 
-// added by Utkarsh
 
-Parse.Cloud.define("hello", function(request, response) {
-    response.success("Hello world!");
-    // You need to include response.success/error in Cloud Code indicating the end of the request, or the codes will went wrong.
-});
-
-Parse.Cloud.define("showHeight", function(request, response) {
-    Parse.Cloud.useMasterKey();   // not needed in this function
-    var query = new Parse.Query("Profile");
-    query.equalTo("objectId", request.params.objectId);
-    query.find({
-        success: function(results) {
-            var sum = 0;
-            for (var i = 0; i < results.length; ++i) {
-                sum += results[i].get("height");
-
-            }
-            response.success(sum);
-        },
-        error: function() {
-            response.error("height lookup failed");
-        }
-    });
-});
-
-Parse.Cloud.define("authenticate", function(request, response) {
-    Parse.Cloud.useMasterKey();
-    Parse.User.logIn("8468088422", "12345678", {
-        success: function(user) {
-            // Do stuff after successful login.
-            response.success("Logged In");
-            alert("helo user,u r logged in");
-        },
-        error: function(user, error) {
-            // The login failed. Check error to see why.
-            response.error("Not logged in");
-        }
-    });
-});
-
-
-//added by Utkarsh
 
 
 

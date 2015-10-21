@@ -1,75 +1,40 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang='en'>
 <head>
-	<title>My Parse App</title>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
+	<meta charset='utf-8' />
+	<title>Cloud Code Demo - 3 - Parse.Cloud.httpRequest</title>
 </head>
-
 <body>
-
-<div>
-	<h1>Congratulations! You're already hosting with Parse.</h1>
-
-	<form name="loginForm">
-		<fieldset>
-			<input name="uname" id="uname" type="text" placeholder="Username">
-
-			<input name="pword" id="pword" type="password" placeholder="Password">
-
-			<button type="submit" onclick="Login()">Submit</button>
-		</fieldset>
-	</form>
-
-
-	<label id="result">Result</label>
-	<button type="submit" onclick="Hello()">Submit</button>
-
-</div>
-
-
-<script type="text/javascript">
-
-	// After installing the Parse SDK above, intialize it with your Parse application ID and key below
-	Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
-
-	function Hello() {
-		Parse.Cloud.run('hello', {}, {
-			success: function (result) {
-				window.alert(result);
-				// result is 'Hello world!'
-			},
-			error: function (error) {
-			}
-		});
-	}
-
-
-	function Login() {
-		Parse.Cloud.run('authenticate', {}, {
-			success: function (result) {
-				alert(result);
-			},
-			error: function (error) {
-				alert("not logged" + error.message+" again not logged" )
-			}
-		});
-	}
-
-
-
-	Parse.Cloud.run('showHeight', {"objectId":"gTau5DP8C1"}, {
-		success: function (ratings) {
-			// ratings should be 4.5
-			alert(ratings);
-		},
-		error: function (error) {
-
-			alert("m not working" + error.message );
-		}
-	});
-
-
-</script>
+ <label id="result"></label>
+ <button onclick="login()">Login</button>
+ <button onclick="getAllProfiles()">Get all profiles</button>
 
 </body>
+<script src='https://www.parsecdn.com/js/parse-1.2.18.min.js'></script>
+<script>
+	Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
+	function login() {
+		Parse.Cloud.run('authenticate', {username: '8468088422', password:'12345678'}, {
+			success: function(result) {
+				window.alert(result.get("username"));
+				document.getElementById("result").innerHTML = result.get("username");
+			},
+			error: function(error) {
+
+			}
+		});
+	}
+
+	function getAllProfiles() {
+		Parse.Cloud.run('getAllProfiles', {}, {
+			success: function(result) {
+			},
+			error: function(error) {
+
+			}
+		});
+	}
+
+</script>
 </html>
+
