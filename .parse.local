@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "MandapTakDev": {
+      "applicationId": "Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0"
+    },
+    "_default": {
+      "link": "MandapTakDev"
+    }
+  }
+}

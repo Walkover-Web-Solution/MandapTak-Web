@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sample App</title>
+  </head>
+  <body>
+  <script type="text/javascript">
+    function Login()
+    			{
+    			//Parse.Cloud.useMasterKey();
+    			console.log("inside login");
+    				Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
+
+
+
+    			  Parse.User.logIn("8468088422", "12345678",
+    			  {
+    				success: function(user)
+    				{
+    				  console.log("logged in");
+    				  alert('success started');
+    				},
+    				error: function(user, error)
+    				{
+    				console.log("log in failed");
+    				  alert('error started');
+    				  // The login failed. Check error to see why.
+    				}
+    			  });
+    			}
+  </script>
+    <h1>Hello World</h1>
+    <p><%= message %></p>
+    <form method="post" action="/login">
+
+            <input name="message"></input>
+            <input class="button" type="submit" value="Update Greeting">
+
+        </form>
+  </body>
+</html>
