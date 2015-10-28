@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <title>Cloud Code Demo - 3 - Parse.Cloud.httpRequest</title>
+</head>
+<body>
+<label id="result"></label>
+<button onclick="login()">Login</button>
+<button onclick="getAllProfiles()">Get all profiles</button>
+<br><br>
+Name <input type="text" id="name" /></br>
+Mobile Number <input type="text" id="mob" /><br>
+
+Gender
+<input type="radio" name="sex" id="sex" value="male">Male
+<input type="radio" name="sex" id="sex" value="male">Female
+<br>
+Date of Birth:
+<input type="date" id="bday">
+<br>
+Birth Time
+<input type="datetime-local" id="btime">
+<br>
+Place of Birth <input type="text" id="bplace" /></br>
+Current Location <input type="text" id="location" /></br>
+<!--Password <input type="password" id="password" /></br>
+Email <input type="email" id="email" /></br> -->
+
+
+<div class="section2">
+
+    Weight <input type="number" id="weight" /></br>
+    Height(in cms) <input type="number" id="height" /></br>
+    Religion <input type="text" id="religion" /></br>
+    Caste <input type="text" id="caste" /></br>
+    Manglik Status
+    <input type="radio" name="manglik" id="manglik" value="Yes">Yes
+    <input type="radio" name="manglik"  id="manglik" value="N0">No
+    <br>
+</div>
+<div class="section3">
+    <form>
+        Work<input type="radio" name="work" id="working"  >Yes
+        <input type="radio"  name="work" id="working" >No
+        <br></form>
+    Designation <input type="text" id="designation" /></br>
+    Company<input type="text" id="company" /></br>
+    Current Income (per annum) <input type="number" id="ctc" /></br>
+    Education
+    <input type="text" id="edu1" /></br>
+    <input type="text" id="edu2" /></br>
+    <input type="text" id="edu3" /></br>
+    <form>
+        Want to work afetr marriage
+        <input type="radio" name="wam" id="wam" value="wam" >Yes
+        <input type="radio" name="wam" id="wam" value="wam">No
+        <br>
+    </form>
+</div>
+<div class="section4">
+
+    Estimated Budget for Marriage (optional) <input type="number" id="maxbud" /></br>
+    <!-- Min Marriage Budget <input type="number" id="minbud" /></br>
+     Package <input type="number" id="package" /></br>
+     Place of Work <input type="text" id="work" /></br>
+
+
+     Work After Marriage<input type="radio" id="wam" value="wam" checked>Yes
+     <input type="radio" id="wam" value="wam">No
+     <br>
+
+
+     Country <input type="text" id="country" /></br>
+     State <input type="text" id="state" /></br>
+     City <input type="text" id="city" /></br>
+     Gotra <input type="text" id="gotra" /></br>
+     Degree <input type="text" id="degree" /></br>
+     Specialization <input type="text" id="spl" /></br>
+     Type of Degree <input type="text" id="type_deg" /></br>
+     Educational Branch <input type="text" id="branch" /></br>
+     Industries<input type="text" id="industry" /></br>
+
+     <br>
+     Preference:
+     <br>
+     Age From <input type="number" id="agef" />Age To <input type="number" id="aget" /></br>
+     Manglik<input type="radio" id="rmanglik" value="Yes" checked>Yes
+     <input type="radio" id="rmanglik" value="No">No
+     <br>
+     Max Budget <input type="number" id="rmaxbud" />Min Budget <input type="number" id="rminbud" /></br>
+     Max Height <input type="number" id="rmaaxheight" />Min Height <input type="number" id="rminheight" /></br>
+     Min Income <input type="number" id="rincome" />
+     Min Gun Match <input type="number" id="rgunmatch" />
+     <br>
+     Working<input type="radio" id="rworking" checked>Yes
+     <input type="radio" id="rworking" >No
+     <br> -->
+</div>
+
+
+
+
+
+<input type="button" value="add user" onclick="addAnUser()" />
+</form>
+
+
+
+
+
+</body>
+<script src='https://www.parsecdn.com/js/parse-1.2.18.min.js'></script>
+<script>
+    Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
+    function login() {
+        Parse.Cloud.run('authenticate', {username: '0000000007', password:'12345678'}, {
+            success: function(result) {
+                window.alert(result.get("username"));
+                document.getElementById("result").innerHTML = result.get("username");
+            },
+            error: function(error) {
+
+            }
+        });
+    }
+
+    function getAllProfiles() {
+        Parse.Cloud.run('getAllProfiles', {}, {
+            success: function(result) {
+            },
+            error: function(error) {
+
+            }
+        });
+    }
+    function addAnUser()
+    {
+        var name=document.getElementById("name").value;
+        var mob=document.getElementById("mob").value;
+        var gender=document.getElementById("sex").value;
+
+        var birthDay=document.getElementById("bday").value;
+        var birthTime=document.getElementById("btime").value;
+
+        var birthPlace=document.getElementById("bplace").value;
+        var currentLocation=document.getElementById("location").value;
+
+        var weigth=document.getElementById("weight").value;
+        var height=document.getElementById("height").value;
+
+        var religion=document.getElementById("religion").value;
+        var caste=document.getElementById("caste").value;
+        var manglikStatus=document.getElementById("manglik").value;
+
+        var work=document.getElementById("working").value;
+        var designation=document.getElementById("designation").value;
+
+        var company=document.getElementById("company").value;
+        var ctc=document.getElementById("ctc").value;
+
+        var edu1=document.getElementById("edu1").value;
+        var edu2=document.getElementById("edu2").value;
+
+        var edu3=document.getElementById("edu3").value;
+        var wam=document.getElementById("wam").value;
+        Parse.Cloud.run('addUsers', {
+            username: name,
+            number:mob,
+            gender:gender,
+            dob:birthDay,
+            tob:birthTime,
+            bplace:birthPlace,
+            currloc:currentLocation,
+            weight:weigth,
+            height:height,
+            religion:religion,
+            caste:caste,
+            manglik:manglikStatus,
+            working:work,
+            desig:designation,
+            comp:company,
+            income: ctc,
+            edu1:edu1,
+            edu2:edu2,
+            edu3:edu3,
+            wam:wam,
+            adminId:'2BohswJjfi',
+            relation:'Admin'
+        }, {
+            success: function(result) {
+                alert("Aded");
+            },
+            error: function(error) {
+                alert("Not added.");
+            }
+        });
+    }
+
+</script>
+</html>
+

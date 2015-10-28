@@ -636,6 +636,8 @@ Parse.Cloud.define("getProfile", function (request, response) {
     var varQuery = new Parse.Query("Profile");
     varQuery.equalTo("objectId", profileid);
     varQuery.include("placeOfBirth.Parent.Parent");
+    varQuery.include("currentLocation.Parent.Parent");
+    varQuery.include("userId");
     varQuery.first({
         success: function (varprofile) {
             //console.log("we got profile here");            

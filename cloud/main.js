@@ -1,5 +1,7 @@
 require('cloud/app.js');
 require('cloud/admin.js');
+
+//require('cloud/agent.js');
 var registerUser = require("cloud/registerUser.js");
 var filterProfileObj = require("cloud/filterProfiles.js");
 var profileObj = require("cloud/profiles.js");
