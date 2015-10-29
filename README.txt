@@ -42,6 +42,10 @@ require('cloud/app.js');
 
 Link to refer: https://www.parse.com/docs/cloudcode/guide#hosting-dynamic-websites
 
+To Initializa Parse object ,include this line :
+
+<script src='https://www.parsecdn.com/js/parse-1.2.18.min.js'></script>
+
 3.To make web app live:
 
 -> go to "hosting" section by clicking on "Setting"

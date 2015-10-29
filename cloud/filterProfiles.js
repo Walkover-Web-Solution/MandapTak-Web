@@ -637,6 +637,10 @@ Parse.Cloud.define("getProfile", function (request, response) {
     varQuery.equalTo("objectId", profileid);
     varQuery.include("placeOfBirth.Parent.Parent");
     varQuery.include("currentLocation.Parent.Parent");
+    varQuery.include("casteId");
+    varQuery.include("religionId");
+    varQuery.include("education1.degreeId");
+    varQuery.include("industryId");
     varQuery.include("userId");
     varQuery.first({
         success: function (varprofile) {

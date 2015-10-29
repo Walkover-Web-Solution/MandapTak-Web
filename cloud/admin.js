@@ -294,24 +294,29 @@ Parse.Cloud.define("getSpecial", function (request, response) {
 Parse.Cloud.define("saveProfile", function (request, response) {
     Parse.Cloud.useMasterKey();
     var profileDetails = request.params.profiletosave;
+    console.log(profileDetails.picture);
     var Profile = Parse.Object.extend("Profile");
     var profile = new Profile();
     profile.set("objectId", profileDetails.id);
     profile.set("name", profileDetails.name);
     profile.set("gender", profileDetails.gender);
     profile.set("dob", new Date(profileDetails.dob));
-    profile.set("tob", new Date(profileDetails.tob));
+    profile.set("tob", new Date(profileDetails.dob + "T" + profileDetails.tob));
     //profile.set("placeOfBirth", profileDetails.birthPlace);
     profile.set("placeOfBirth", {"__type": "Pointer", "className": "City", "objectId": profileDetails.birthPlace});
     //profile.set("currentLocation", profileDetails.currentLocation);
-    profile.set("currentLocation", {"__type": "Pointer", "className": "City", "objectId": profileDetails.currentLocation});
+    profile.set("currentLocation", {
+        "__type": "Pointer",
+        "className": "City",
+        "objectId": profileDetails.currentLocation
+    });
 
     profile.set("weight", parseInt(profileDetails.weight));
     profile.set("height", parseInt(profileDetails.height));
 
-    profile.set("religionId", profileDetails.religion);
+    profile.set("religionId", {"__type": "Pointer", "className": "Religion", "objectId": profileDetails.religion});
 
-    profile.set("casteId", profileDetails.caste);
+    profile.set("casteId", {"__type": "Pointer", "className": "Caste", "objectId": profileDetails.caste});
 
     profile.set("manglik", parseInt(profileDetails.manglik));
 
@@ -325,14 +330,15 @@ Parse.Cloud.define("saveProfile", function (request, response) {
     profile.set("package", parseInt(profileDetails.package));
 
     //profile.set("education1", (profileDetails.education));
-    profile.set("education1", {"__type": "Pointer", "className": "Specialization", "objectId": profileDetails.education});
+    profile.set("education1", {
+        "__type": "Pointer",
+        "className": "Specialization",
+        "objectId": profileDetails.education
+    });
 
     profile.set("workAfterMarriage", parseInt(profileDetails.wantToWork));
-
-
-   // var parseFile = new Parse.File(profileDetails.picture.name, profileDetails.picture);
     profile.set("isComplete", false);
-    //profile.set("profilePic", parseFile);
+
     //profile.set("placeOfBirth", {"__type": "Pointer", "className": "City", "objectId": profileDetails.birthPlace});
     profile.save().then(
         function (result) {
@@ -344,6 +350,85 @@ Parse.Cloud.define("saveProfile", function (request, response) {
             response.error(error);
         }
     );
+});
+
+Parse.Cloud.define("ProfilePhotoSave", function (request, response) {
+    var profileId = request.params.profile;
+    var promises = [];
+    var selectedProfile;
+    promises.push(
+        Parse.Cloud.run("getProfile", {profileId: profileId}, {
+                success: function (result) {
+                    console.log(result.get("userId").get("username"));
+                    selectedProfile = result;
+                }
+            }
+        ));
+    Parse.Promise.when(promises).then(function (result) {
+        var movieId = selectedProfile.get("profilePic");
+        var Photo = new Parse.Object.extend("Photo");
+        var photu = new Photo();
+        var query = new Parse.Query("Photo");
+        query.equalTo("isPrimary", true);
+        query.equalTo("profileId", {
+            "__type": "Pointer",
+            "className": "Profile",
+            "objectId": selectedProfile.id
+        });
+        query.first({
+            success: function (result) {
+                if (result != undefined ) {
+                    console.log("file already exist");
+                    response.success("success");
+                }
+                else {
+                    photu.set("profileId", {
+                        "__type": "Pointer",
+                        "className": "Profile",
+                        "objectId": selectedProfile.id
+                    });
+                    photu.set("isPrimary", true);
+                    photu.set("file", movieId);
+                    photu.save(null, {
+                        success: function (user) {
+                            console.log("saved successfully");
+                            response.success(user);
+                        },
+                        error: function (user, error) {
+                            console.log('Failed to create new object, with error code: ' + error.message);
+                            response.error(error);
+                        }
+                    });
+                }
+            },
+            error: function (err) {
+                console.log("unable to find photo");
+                response.error(err);
+            }
+        });
+    });
+});
+
+Parse.Cloud.define("savePhoto", function (request, response) {
+    Parse.Cloud.useMasterKey();
+    var userObjectId = request.params.uOId;
+    var fileTosave = request.params.filee;
+    var photu = new Parse.Object.extend("Photo");
+    console.log("Working here");
+    photu.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": userObjectId});
+    console.log("Not working here");
+    photu.set("isPrimary", true);
+    photu.set("file", fileTosave);
+    console.log("saving pic in photo");
+    photu.save(null, {
+        success: function (user) {
+            response.success(user);
+        },
+        error: function (user, error) {
+            console.log('Failed to create new object, with error code: ' + error.message);
+            response.error(error);
+        }
+    });
 });
 
 //added by Utkarsh
