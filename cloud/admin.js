@@ -17,12 +17,26 @@ Parse.Cloud.define("authenticate", function (request, response) {
 Parse.Cloud.define("getAllProfiles", function (request, response) {
     Parse.Cloud.useMasterKey();
     var pageNo = request.params.pageno;
+    var order=request.params.order;
     var query = new Parse.Query("Profile");
     query.include("userId");
+    var isTrue;
+    if(order==1)
+    query.equalTo("isComplete",true);
+    else if(order==2)
+    query.equalTo("isComplete",false);
     query.limit(10);
     query.skip((pageNo - 1) * 10);
     query.find().then(function (result) {
         response.success(result);
+    });
+});
+Parse.Cloud.define("getProfileCount", function (request, response) {
+    Parse.Cloud.useMasterKey();
+    var query = new Parse.Query("Profile");
+    query.include("userId");
+    query.find().then(function (result) {
+        response.success(result.length);
     });
 });
 
@@ -321,7 +335,8 @@ Parse.Cloud.define("saveProfile", function (request, response) {
     profile.set("manglik", parseInt(profileDetails.manglik));
 
     //profile.set("industryId", profileDetails.industry);
-    profile.set("industryId", {"__type": "Pointer", "className": "Industries", "objectId": profileDetails.industry});
+    if(profileDetails.industry!=="")
+        profile.set("industryId", {"__type": "Pointer", "className": "Industries", "objectId": profileDetails.industry});
 
     profile.set("designation", profileDetails.designation);
 
