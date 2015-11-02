@@ -303,6 +303,16 @@ Parse.Cloud.define("getSpecial", function (request, response) {
         response.success(result);
     });
 });
+Parse.Cloud.define("getUserName", function (request, response) {
+    Parse.Cloud.useMasterKey();
+    var searchthis = request.params.searchThis;
+    var query = new Parse.Query("_User");
+    query.startsWith("username", searchthis);
+    //query.include("Parent.Parent");
+    query.find().then(function (result) {
+        response.success(result);
+    });
+});
 
 
 Parse.Cloud.define("saveProfile", function (request, response) {
