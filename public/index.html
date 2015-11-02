@@ -43,9 +43,11 @@
     </table>
     <ul class="pager">
         <li><a onclick="jsfunction(0)" href="#">Previous</a></li>
-        <li><input type="text" disabled id="pageno" value="1"></li>
+        <!--<li><input type="text" disabled id="pageno" value="1"></li>-->
+        <li><input type="text" id="pageno" value="1" style="width: 40px;"></li>
         <li><a onclick="jsfunction(1)" href="#">Next</a></li>
     </ul>
+    <button type="button" class="btn btn-primary btn-lg" onclick="navigateToPage()" style="margin-left: 49%">Go</button>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
@@ -146,10 +148,10 @@
                                 <input type="text" class="form-control" id="edu" placeholder="Enter Education">
                                 <input type="text" class="form-control" id="spe" placeholder="Enter Specialization">
                             </div>
-                            <div class="form-group ui-widget">
-                                <label>User Name:</label>
-                                <input type="text" class="form-control" id="username" placeholder="Enter User name">
-                            </div>
+                            <!--<div class="form-group ui-widget">-->
+                                <!--<label>User Name:</label>-->
+                                <!--<input type="text" class="form-control" id="username" placeholder="Enter User name">-->
+                            <!--</div>-->
                         </div>
                     </div>
                     <!--
@@ -238,7 +240,7 @@ Progress Bar
     var currentPageNo;
     Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
     function jsfunction(operation) {
-        profileCount();
+        profileCount(order);
         var val = document.getElementById("pageno").value;
         if (operation == 1 && val<Math.ceil(count/10)) {
             document.getElementById("pageno").value = ++val;
@@ -264,8 +266,18 @@ Progress Bar
             reader.readAsDataURL(input.files[0]);
         }
     }
+    function navigateToPage()
+    {
+        var pageToNavigate=document.getElementById("pageno").value;
+        if(pageToNavigate>0 && pageToNavigate<=Math.ceil(count/10))
+            getAllProfiles(document.getElementById("pageno").value);
+        else
+        alert("Not a valid page.Page Limit "+Math.ceil(count/10));
+    }
     function sortByCompleteProfile() {
         order = parseInt(document.getElementById("sorted").value);
+        profileCount(order);
+        alert(count);
         
         getAllProfiles(currentPageNo,order);
     }
@@ -281,8 +293,8 @@ Progress Bar
         });
     }
 
-    function profileCount(){
-        Parse.Cloud.run('getProfileCount', {}, {
+    function profileCount(order){
+        Parse.Cloud.run('getProfileCount', {order:order}, {
             success: function (result) {
                 count=result;
             },
@@ -330,19 +342,15 @@ Progress Bar
                         document.getElementById("weight").value = selectedProfile.get("weight");
                         document.getElementById("height").value = selectedProfile.get("height");
                         dateSet = selectedProfile.get("dob");
-                        document.getElementById("dob").value = dateSet.getFullYear() + "-" + addZero((dateSet.getMonth() + 1)) + "-" + addZero(dateSet.getDate());//Date(selectedProfile.get("dob"));
+                        if(dateSet!=undefined)
+                            document.getElementById("dob").value = dateSet.getFullYear() + "-" + addZero((dateSet.getMonth() + 1)) + "-" + addZero(dateSet.getDate());//Date(selectedProfile.get("dob"));
                         var timeSet = selectedProfile.get("tob");
-                        timeSet.setMinutes(timeSet.getMinutes() - 330);
-                        var hrs = timeSet.getHours();
-                        var mins = timeSet.getMinutes();
-//                        if (mins<0)
-//                        {
-//                            hrs-=1;
-//                            mins=60+mins;
-//                        }
-//                        alert(timeSet+hrs+":"+mins);
-
-                        document.getElementById("tob").value = addZero(hrs) + ":" + addZero(mins) + ":" + addZero(timeSet.getSeconds());
+                        if(timeSet!=undefined) {
+                            timeSet.setMinutes(timeSet.getMinutes() - 330);
+                            var hrs = timeSet.getHours();
+                            var mins = timeSet.getMinutes();
+                            document.getElementById("tob").value = addZero(hrs) + ":" + addZero(mins) + ":" + addZero(timeSet.getSeconds());
+                        }
                         if (selectedProfile.get("religionId") != null)
                             document.getElementById("rel").value = selectedProfile.get("religionId").get("name");
                         if (selectedProfile.get("casteId") != null)

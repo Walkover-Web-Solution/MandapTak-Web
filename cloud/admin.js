@@ -33,8 +33,13 @@ Parse.Cloud.define("getAllProfiles", function (request, response) {
 });
 Parse.Cloud.define("getProfileCount", function (request, response) {
     Parse.Cloud.useMasterKey();
+    var order=parseInt(request.params.order);
     var query = new Parse.Query("Profile");
     query.include("userId");
+    if(order==1)
+        query.equalTo("isComplete",true);
+    else if(order==2)
+    query.equalTo("isComplete",false);
     query.find().then(function (result) {
         response.success(result.length);
     });
