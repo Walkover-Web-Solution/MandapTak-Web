@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'>
+<body lang='en'>
 <head>
     <meta charset='utf-8' />
     <title>Cloud Code Demo - 3 - Parse.Cloud.httpRequest</title>
@@ -16,10 +16,6 @@
     </style>
 </head>
 <body>
-<!--<label id="result"></label>-->
-<!--<button onclick="login()">Login</button>-->
-<!--<button onclick="getAllProfiles()">Get all profiles</button>-->
-<!--<br><br>-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
     <div class="modal-dialog modal-lg">
 
@@ -168,21 +164,11 @@
 </div>
 <button class='btn btn-primary' data-toggle='modal' data-target='#myModal' >Add Profile</button>;
 
-</body>
 <script src='https://www.parsecdn.com/js/parse-1.2.18.min.js'></script>
+
 <script>
     Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
-    function login() {
-        Parse.Cloud.run('authenticate', {username: '0000000007', password:'12345678'}, {
-            success: function(result) {
-                window.alert(result.get("username"));
-                document.getElementById("result").innerHTML = result.get("username");
-            },
-            error: function(error) {
 
-            }
-        });
-    }
 
     function getAllProfiles() {
         Parse.Cloud.run('getAllProfiles', {}, {
@@ -257,5 +243,7 @@
     }
 
 </script>
+<script src="js/editProfile.js"></script>
+</body>
 </html>
 
