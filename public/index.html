@@ -21,7 +21,7 @@
     <span>
         <h2>Profile Table</h2>
         <div class="ui-widget">
-            Sort
+            Sort Profiles
             <select id="sorted" onchange="sortByCompleteProfile()">
                 <option value="0">All</option>
                 <option value="1">True</option>
@@ -30,8 +30,16 @@
         </div>
 
         <div class="ui-widget">
-            <label>Search By Number:</label>
+            <label>Search User By Number:</label>
+            <br>
+            <label>Select Agent Number</label>
+            <select id="forAgents" >
+                <option></option>
+            </select>
+            <label>Enter User Number</label>
             <input type="text"  id="searchByNumber" placeholder="Enter Number">
+            <button type="button" class="btn btn-default btn-sm" onclick="searchProfileForAgent()">Go</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="reset()">Reset</button>
         </div>
     </span>
 
@@ -50,11 +58,11 @@
     </table>
     <ul class="pager">
         <li><a onclick="jsfunction(0)" href="#">Previous</a></li>
-        <!--<li><input type="text" disabled id="pageno" value="1"></li>-->
-        <li><input type="text" id="pageno" value="1" style="width: 40px;"></li>
+        <li><input type="text" id="pageno" value="1" style="width:40px; text-align: center"></li>
+        <li><button type="button" class="btn btn-default" onclick="navigateToPage()">Go</button></li>
         <li><a onclick="jsfunction(1)" href="#">Next</a></li>
+
     </ul>
-    <button type="button" class="btn btn-primary btn-lg" onclick="navigateToPage()" style="margin-left: 49%">Go</button>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
@@ -186,6 +194,9 @@
                     <div class="form-group">
                         <input type="hidden" class="form-control" id="indusobj">
                     </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="requiredUserId">
+                    </div>
                     <!-- Hidden Fields-->
 
 
@@ -231,9 +242,32 @@ Progress Bar
 </div>
 <!-- /.modal -->
 
+
 </body>
 <script src='https://www.parsecdn.com/js/parse-1.2.18.min.js'></script>
 <script src="js/non-empty.js"></script>
 <script src="js/editProfile.js"></script>
+<script>
+    (function() {
+        var elm = document.getElementById('forAgents'),
+                df = document.createDocumentFragment();
+        Parse.Cloud.run('getAllAgents', {}, {
+            success: function (result) {
+                for(var i = 0; i <result.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = result[i].id;
+                    option.appendChild(document.createTextNode(result[i].get("username")));
+                    df.appendChild(option);
+                }
+                elm.appendChild(df);
+                console.log("select box is working")
+            },
+            error: function (error) {
+                console.log("select box for agent is not working");
+
+            }
+        });
+    }());
+</script>
 </html>
 

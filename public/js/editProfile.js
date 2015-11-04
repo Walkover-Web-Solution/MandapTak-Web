@@ -1,21 +1,21 @@
 /**
  * Created by utkarsh on 11/2/2015.
  */
-var selectedProfile,count= 0,order=0;
+var selectedProfile, uid, count = 0, order = 0;
 var picFile;
 var currentPageNo;
 Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
 function jsfunction(operation) {
     profileCount(order);
     var val = document.getElementById("pageno").value;
-    if (operation == 1 && val<Math.ceil(count/10)) {
+    if (operation == 1 && val < Math.ceil(count / 10)) {
         document.getElementById("pageno").value = ++val;
 
     }
     else if (operation == 0 && val != 1) {
         document.getElementById("pageno").value = --val;
     }
-    getAllProfiles(val,order);
+    getAllProfiles(val, order);
 }
 
 function readURL(input) {
@@ -32,19 +32,18 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-function navigateToPage()
-{
-    var pageToNavigate=document.getElementById("pageno").value;
-    if(pageToNavigate>0 && pageToNavigate<=Math.ceil(count/10))
+function navigateToPage() {
+    var pageToNavigate = document.getElementById("pageno").value;
+    if (pageToNavigate > 0 && pageToNavigate <= Math.ceil(count / 10))
         getAllProfiles(document.getElementById("pageno").value);
     else
-        alert("Not a valid page.Page Limit "+Math.ceil(count/10));
+        alert("Not a valid page.Page Limit " + Math.ceil(count / 10));
 }
 function sortByCompleteProfile() {
     order = parseInt(document.getElementById("sorted").value);
     profileCount(order);
-    document.getElementById("pageno").value=1;
-    getAllProfiles(1,order);
+    document.getElementById("pageno").value = 1;
+    getAllProfiles(1, order);
 }
 function login() {
     Parse.Cloud.run('authenticate', {username: '0000000007', password: '12345678'}, {
@@ -58,10 +57,10 @@ function login() {
     });
 }
 
-function profileCount(order){
-    Parse.Cloud.run('getProfileCount', {order:order}, {
+function profileCount(order) {
+    Parse.Cloud.run('getProfileCount', {order: order}, {
         success: function (result) {
-            count=result;
+            count = result;
         },
         error: function (error) {
 
@@ -69,10 +68,10 @@ function profileCount(order){
     });
 }
 
-function getAllProfiles(pageNo,order) {
+function getAllProfiles(pageNo, order) {
     show("Loading...");
     currentPageNo = pageNo;
-    Parse.Cloud.run('getAllProfiles', {pageno: pageNo,order:order}, {
+    Parse.Cloud.run('getAllProfiles', {pageno: pageNo, order: order}, {
         success: function (result) {
             var html = "";
             for (var i = 0; i < result.length; i++) {
@@ -107,10 +106,10 @@ function editProfile(profile) {
                 document.getElementById("weight").value = selectedProfile.get("weight");
                 document.getElementById("height").value = selectedProfile.get("height");
                 dateSet = selectedProfile.get("dob");
-                if(dateSet!=undefined)
+                if (dateSet != undefined)
                     document.getElementById("dob").value = dateSet.getFullYear() + "-" + addZero((dateSet.getMonth() + 1)) + "-" + addZero(dateSet.getDate());//Date(selectedProfile.get("dob"));
                 var timeSet = selectedProfile.get("tob");
-                if(timeSet!=undefined) {
+                if (timeSet != undefined) {
                     timeSet.setMinutes(timeSet.getMinutes() - 330);
                     var hrs = timeSet.getHours();
                     var mins = timeSet.getMinutes();
@@ -525,24 +524,25 @@ $(function () {
     });
     $("#searchByNumber").autocomplete({
         source: function (request, response) {
-            var userId="MtvIUfHct0";
-            Parse.Cloud.run("getUserName", {"searchThis": request.term,userId:userId}, {
+            var userid = document.getElementById("forAgents").value;
+            Parse.Cloud.run("getUserName", {"searchThis": request.term, "userid": userid}, {
                 success: function (result) {
                     showThisResult = [];
+                    if(result.length==0)alert("No result for this number");
                     for (var i = 0; i < result.length; i++) {
                         var obj = {};
                         obj.label = result[i].get("profileId").get("userId").get("username");
                         obj.value = obj.label;
-                        obj.jsonS = JSON.stringify(result[i]);
+                        obj.jsonS = JSON.stringify(result[i].get("profileId").get("userId"));
                         showThisResult.push(obj);
-                        console.log(result[i].get("relation"));
+                        console.log(result[i].get("profileId").get("userId").get("username"));
                     }
                     response(showThisResult);
                 },
                 error: function (error) {
                     alert("user field not working");
                 }
-            })
+            });
         },
         minLength: 1,
         select: function (event, ui) {
@@ -550,13 +550,11 @@ $(function () {
             console.log(ui ?
             "Selected: " + ui.item.value :
             "Nothing selected, input was " + this.value);
-            //this.value = ui.item.value.get("name") + "," + ui.item.value.get("Parent").get("name") + "," + ui.item.value.get("Parent").get("Parent").get("name");
-//                var indusId = JSON.parse(ui.item.jsonS);
-//                document.getElementById("indusobj").value = indusId["objectId"];
+            var userIdForAgent = JSON.parse(ui.item.jsonS);
+            document.getElementById("requiredUserId").value = userIdForAgent["objectId"];// got the profile Id.
             return ui.item.label;
         }
     });
-
 
 });
 
@@ -622,9 +620,46 @@ function addAnUser() {
         }
     });
 }
-function doWait() {
-    window.location.href = "http://mandaptak.parseapp.com/#";
+function searchProfileForAgent()
+{
+    var number=document.getElementById("searchByNumber").value;
+    document.getElementById("pageno").value = 1;
+    getProfileForAgent(number);
+
 }
+
+//function getUserIdForGivenProfle(pid)
+//{
+//    Parse.Cloud.run('getUserId', {pid:pid}, {
+//        success: function (result) {
+//            uid=result[0].get("userId")["id"];
+//
+//        },
+//        error: function (error) {
+//            console.log("User id not found");
+//        }
+//    });
+//}
+function getProfileForAgent(number)
+{
+    show("Loading...");
+    var pId=document.getElementById("requiredUserId").value;// this is profileID in table UserProfile, Need userId
+    Parse.Cloud.run('getProfileForAgent', {userId:pId}, {
+        success: function (result) {
+            var html = "";
+            for (var i = 0; i < result.length; i++) {
+                html += "<tr><td>" + result[i].get("userId").get("username") + "</td><td>" + result[i].get("name") +
+                    "</td><td>" + result[i].get("isComplete") + "</td><td><button class='btn btn-primary' data-toggle='modal' data-target='#myModal' onclick='editProfile(" + JSON.stringify(result[i]) + ")'>EDIT</button></td></tr>";
+            }
+            close();
+            document.getElementById("profileTable").innerHTML = html;
+        },
+        error: function (error) {
+
+        }
+    });
+}
+
 function show(message) {
     $('#pleaseWaitDialog').modal();
     document.getElementById("textToShow").innerHTML = message;
@@ -633,4 +668,7 @@ function show(message) {
 
 function close() {
     $('#pleaseWaitDialog').modal('hide');
+}
+function reset() {
+    location.reload();
 }

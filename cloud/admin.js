@@ -31,6 +31,34 @@ Parse.Cloud.define("getAllProfiles", function (request, response) {
         response.success(result);
     });
 });
+Parse.Cloud.define("getProfileForAgent", function (request, response) {
+    Parse.Cloud.useMasterKey();
+    var userId=request.params.userId;
+    var query = new Parse.Query("Profile");
+    query.include("userId");
+    query.equalTo("userId",{"__type": "Pointer", "className": "_User", "objectId": userId});
+    query.find().then(function (result) {
+        response.success(result);
+    });
+});
+//Parse.Cloud.define("getUserIdForAgent", function (request, response) {
+//    Parse.Cloud.useMasterKey();
+//    var number=request.params.userNumber;
+//    var query = new Parse.Query("_User");
+//    query.equalTo("username",number);
+//    query.find().then(function (result) {
+//        response.success(result);
+//    });
+//});
+
+Parse.Cloud.define("getAllAgents", function (request, response) {
+    Parse.Cloud.useMasterKey();
+    var query = new Parse.Query("_User");
+    query.equalTo("roleId",{"__type": "Pointer", "className": "Role", "objectId": "eT9dNTffJi"});
+    query.find().then(function (result) {
+        response.success(result);
+    });
+});
 Parse.Cloud.define("getProfileCount", function (request, response) {
     Parse.Cloud.useMasterKey();
     var order=parseInt(request.params.order);
@@ -320,10 +348,20 @@ Parse.Cloud.define("getUserName1", function (request, response) {
     });
 });
 
+Parse.Cloud.define("getUserId", function(request,response)
+{
+    Parse.Cloud.useMasterKey();
+    var pid=request.params.pid;
+    var query=new Parse.Query("Profile");
+    query.equalTo("objectId",pid);
+    query.find().then(function(result){
+       response.success(result);
+    });
+});
 Parse.Cloud.define("getUserName", function (request, response) {
     Parse.Cloud.useMasterKey();
     var searchthis = request.params.searchThis;
-    var userId=request.params.userId;
+    var userId=request.params.userid;
     var query = new Parse.Query("_User");
     query.startsWith("username", searchthis);
 
@@ -334,9 +372,9 @@ Parse.Cloud.define("getUserName", function (request, response) {
     outerQuery.include("profileId.userId");
     outerQuery.equalTo("userId",{"__type": "Pointer", "className": "_User", "objectId": userId});
     outerQuery.find().then(function (result) {
-        outerQuery.find().then(function (result) {
+        //outerQuery.find().then(function (result) {
             response.success(result);
-        });
+        //});
     });
 
 });

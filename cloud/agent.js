@@ -255,6 +255,7 @@ Parse.Cloud.define("addNewUserForAgent", function (request, response) {
     var mobileNo = request.params.mobile;
     var agentid = request.params.agentId;
     var relation = request.params.relation;
+    var credit=request.params.credit; // added by Utkarsh
     if (mobileNo == null || mobileNo.length < 10 || mobileNo.length > 10) {
         response.error("Enter proper mobile number.");
     }
@@ -286,7 +287,7 @@ Parse.Cloud.define("addNewUserForAgent", function (request, response) {
                                     if (agentUProfile.get('userId').id === agentid) {
                                         console.log("same agent is activating user.");
                                         var promise = Parse.Promise.as();
-                                        promise = Parse.Cloud.run("doTransaction", { agentId: agentid, userId: profile.id, amount: '10' },
+                                        promise = Parse.Cloud.run("doTransaction", { agentId: agentid, userId: profile.id, amount: credit },
                                         {
                                             success: function () {
                                                 console.log("Everything is done");
