@@ -504,9 +504,7 @@ Parse.Cloud.define("savePhoto", function (request, response) {
     var userObjectId = request.params.uOId;
     var fileTosave = request.params.filee;
     var photu = new Parse.Object.extend("Photo");
-    console.log("Working here");
     photu.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": userObjectId});
-    console.log("Not working here");
     photu.set("isPrimary", true);
     photu.set("file", fileTosave);
     console.log("saving pic in photo");

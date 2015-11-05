@@ -17,7 +17,6 @@ function jsfunction(operation) {
     }
     getAllProfiles(val, order);
 }
-
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -61,13 +60,13 @@ function profileCount(order) {
     Parse.Cloud.run('getProfileCount', {order: order}, {
         success: function (result) {
             count = result;
+            document.getElementById("pageLimit").innerHTML = "Maximum Page Limit:" + Math.ceil(count / 10);
         },
         error: function (error) {
 
         }
     });
 }
-
 function getAllProfiles(pageNo, order) {
     show("Loading...");
     currentPageNo = pageNo;
@@ -525,10 +524,13 @@ $(function () {
     $("#searchByNumber").autocomplete({
         source: function (request, response) {
             var userid = document.getElementById("forAgents").value;
+            if (userid == "")
+                alert("Please Select Agent Number First");
             Parse.Cloud.run("getUserName", {"searchThis": request.term, "userid": userid}, {
                 success: function (result) {
                     showThisResult = [];
-                    if(result.length==0)alert("No result for this number");
+                    if (result.length == 0 && userid !== "")alert("No matching result found for this number");
+
                     for (var i = 0; i < result.length; i++) {
                         var obj = {};
                         obj.label = result[i].get("profileId").get("userId").get("username");
@@ -620,31 +622,18 @@ function addAnUser() {
         }
     });
 }
-function searchProfileForAgent()
-{
-    var number=document.getElementById("searchByNumber").value;
+
+function searchProfileForAgent() {
+    var number = document.getElementById("searchByNumber").value;
+    if (number == "" && document.getElementById("searchByNumber").value == "")reset();
     document.getElementById("pageno").value = 1;
+    document.getElementById("pageLimit").innerHTML = "Maximum Page Limit :1";
     getProfileForAgent(number);
-
 }
-
-//function getUserIdForGivenProfle(pid)
-//{
-//    Parse.Cloud.run('getUserId', {pid:pid}, {
-//        success: function (result) {
-//            uid=result[0].get("userId")["id"];
-//
-//        },
-//        error: function (error) {
-//            console.log("User id not found");
-//        }
-//    });
-//}
-function getProfileForAgent(number)
-{
+function getProfileForAgent(number) {
     show("Loading...");
-    var pId=document.getElementById("requiredUserId").value;// this is profileID in table UserProfile, Need userId
-    Parse.Cloud.run('getProfileForAgent', {userId:pId}, {
+    var pId = document.getElementById("requiredUserId").value;// this is profileID in table UserProfile, Need userId
+    Parse.Cloud.run('getProfileForAgent', {userId: pId}, {
         success: function (result) {
             var html = "";
             for (var i = 0; i < result.length; i++) {
