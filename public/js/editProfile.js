@@ -45,13 +45,16 @@ function sortByCompleteProfile() {
     getAllProfiles(1, order);
 }
 function login() {
-    Parse.Cloud.run('authenticate', {username: '0000000007', password: '12345678'}, {
+    var ifLoggedin=false;
+    var userNumber=document.getElementById("usernumber").value;
+    var password=document.getElementById("userpasword").value;
+    Parse.Cloud.run('authenticate', {username: userNumber, password: password}, {
         success: function (result) {
-            window.alert(result.get("username"));
-            document.getElementById("result").innerHTML = result.get("username");
+            closeImageModal();
+            jsfunction(1);
         },
         error: function (error) {
-
+            alert("Please Enter Correct Number and Password");
         }
     });
 }
@@ -181,6 +184,7 @@ function saveProfile() {
         profileObj.package = document.getElementById("income").value;
         profileObj.education = document.getElementById("speobj").value;
         profileObj.wantToWork = document.getElementById("workSelect").value;
+
         var profileSaved = new Parse.Object.extend("Profile");
         Parse.Cloud.run("saveProfile", {profiletosave: profileObj}, {
                 success: function (result) {
@@ -211,6 +215,9 @@ function saveProfile() {
                         deferred.resolve(base64Img);
                     };
                     img.src = element.src;
+                    // to crop image
+                    cropImage(img.src);
+                    //
                     return deferred;
                 });
 
@@ -259,7 +266,9 @@ function saveProfile() {
     }
 }
 
-
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 $(function () {
 
     $('#myModal').on('hidden.bs.modal', function () {
@@ -285,7 +294,7 @@ $(function () {
 
     $("#bp").autocomplete({
         source: function (request, response) {
-            Parse.Cloud.run("getCities", {"searchThis": request.term}, {
+            Parse.Cloud.run("getCities", {"searchThis": capitalizeFirstLetter(request.term)}, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -319,7 +328,7 @@ $(function () {
 
     $("#cl").autocomplete({
         source: function (request, response) {
-            Parse.Cloud.run("getCities", {"searchThis": request.term}, {
+            Parse.Cloud.run("getCities", {"searchThis": capitalizeFirstLetter(request.term)}, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -354,7 +363,7 @@ $(function () {
     $("#rel").autocomplete({
 
         source: function (request, response) {
-            Parse.Cloud.run("getReligion", {"searchThis": request.term}, {
+            Parse.Cloud.run("getReligion", {"searchThis": capitalizeFirstLetter(request.term)}, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -389,7 +398,7 @@ $(function () {
         source: function (request, response) {
             var religionId = document.getElementById("relobj").value;
             console.log(religionId);
-            Parse.Cloud.run("getCaste", {"searchThis": request.term, religion: religionId}, {
+            Parse.Cloud.run("getCaste", {"searchThis": capitalizeFirstLetter(request.term), religion: religionId}, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -422,7 +431,7 @@ $(function () {
 
     $("#work").autocomplete({
         source: function (request, response) {
-            Parse.Cloud.run("getIndustry", {"searchThis": request.term}, {
+            Parse.Cloud.run("getIndustry", {"searchThis": capitalizeFirstLetter(request.term)}, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -455,7 +464,7 @@ $(function () {
 
     $("#edu").autocomplete({
         source: function (request, response) {
-            Parse.Cloud.run("getEducation", {"searchThis": request.term}, {
+            Parse.Cloud.run("getEducation", {"searchThis": capitalizeFirstLetter(request.term)}, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -491,7 +500,7 @@ $(function () {
         source: function (request, response) {
             var eduId = document.getElementById("eduobj").value;
             console.log(eduId);
-            Parse.Cloud.run("getSpecial", {"searchThis": request.term, education: eduId}, {
+            Parse.Cloud.run("getSpecial", {"searchThis": capitalizeFirstLetter(request.term), education: eduId}, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -658,6 +667,20 @@ function show(message) {
 function close() {
     $('#pleaseWaitDialog').modal('hide');
 }
+function closeImageModal() {
+    $('#pleaseWaitDialog').modal('hide');
+    $('#imgModal').modal('hide');
+    alert("sunno");
+
+}
 function reset() {
     location.reload();
+}
+function cropImage(srcImage) {
+    alert("helo ");
+    document.getElementById("myImg").src = srcImage;
+}
+function doLogin()
+{
+    var ifLoggedin=login();
 }

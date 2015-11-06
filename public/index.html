@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
     <meta charset='utf-8'/>
-    <title>Cloud Code Demo - 3 - Parse.Cloud.httpRequest</title>
+    <title>MandapTak</title>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
     <!--<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />-->
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>-->
@@ -12,10 +12,9 @@
     <script src="js/jquery-ui.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
-    <script>
-    </script>
 </head>
-<body onload="jsfunction(1)">
+<body >
+<!--<body onload="jsfunction(1)">-->
 <div class="container">
     <span>
         <h2>Profile Table</h2>
@@ -66,7 +65,7 @@
 </div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg ">
 
         <!-- Modal content-->
         <div class="modal-content">
@@ -200,10 +199,13 @@
                     <!-- Hidden Fields-->
 
 
-                    <div class="form-group hidden">
-                        <!--<label>Browse Image:</label>-->
-                        <!--<input type='file' onchange="readURL(this);"/>-->
-                        <img id="blah" src="user.png" alt="your image" class="images"/>
+                    <!--<div class="form-group hidden">-->
+                    <div class="form-group">
+                        <label>Browse Image:</label>
+                        <input type='file' onchange="readURL(this);"/>
+                        <img id="blah" src="#" alt="your image" class="images"/>
+                        <!--<button class='btn btn-primary' data-toggle='modal' data-target='#imageModal' onclick='uploadImage(" + JSON.stringify(result[i]) + ")'>Upload</button>-->
+                        <!--<img id="blah" src="user.png" alt="your image" class="images"/>-->
                     </div>
 
                     <!--<input class="btn btn-primary" type="button" value="SaveProfile" onclick="saveProfile()"/>-->
@@ -217,8 +219,36 @@
 
     </div>
 </div>
+<div class="modal fade" id="imgModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog modal-lg ">
 
-</div>
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                <h4 class="modal-title">Login</h4>
+            </div>
+            <div class="modal-body" style="float:none">
+                <form id="loginForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Number:</label>
+                                <input type="text" class="form-control" id="usernumber" placeholder="Enter Number">
+                            </div>
+                            <div class="form-group">
+                                <label>Password:</label>
+                                <input type="password" class="form-control" id="userpasword" placeholder="Enter Password">
+                            </div>
+
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="doLogin()">Submit</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
 </div>
 <!--
 Progress Bar
@@ -242,12 +272,18 @@ Progress Bar
 </div>
 <!-- /.modal -->
 
-
 </body>
 <script src='https://www.parsecdn.com/js/parse-1.2.18.min.js'></script>
 <script src="js/non-empty.js"></script>
 <script src="js/editProfile.js"></script>
 <script>
+    $(window).load(function(){
+        $('#imgModal').modal('show');
+    });
+    $('#imgModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
     (function() {
         var elm = document.getElementById('forAgents'),
                 df = document.createDocumentFragment();

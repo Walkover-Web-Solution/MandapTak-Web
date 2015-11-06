@@ -5,9 +5,11 @@ Parse.Cloud.define("authenticate", function (request, response) {
     Parse.User.logIn(request.params.username, request.params.password, {
         success: function (user) {
             // Do stuff after successful login.
+            console.log("logged in");
             response.success(user);
         },
         error: function (user, error) {
+            console.log("not loged in");
             // The login failed. Check error to see why.
             response.error(error);
         }
@@ -348,8 +350,7 @@ Parse.Cloud.define("getUserName1", function (request, response) {
     });
 });
 
-Parse.Cloud.define("getUserId", function(request,response)
-{
+Parse.Cloud.define("getUserId", function(request,response){
     Parse.Cloud.useMasterKey();
     var pid=request.params.pid;
     var query=new Parse.Query("Profile");
