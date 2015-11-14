@@ -68,7 +68,7 @@ Parse.Cloud.define("verifyNumber", function (request, response) {
         }).then(function (httpResponse) {
             //generate password here save to user table and send it to device
             var passwordGenerate = randomString(8, rString);
-            console.log("Password generated : " + passwordGenerate);
+            console.log("Password generated : ");
             var promise = Parse.Promise.as();
             promise = promise.then(function () {
                 var query = new Parse.Query(Parse.User);
@@ -77,7 +77,6 @@ Parse.Cloud.define("verifyNumber", function (request, response) {
                     console.log(user);
                     var pUser = new Parse.User();
                     pUser = user[0];
-                    console.log(pUser);
                     pUser.set("password", passwordGenerate);
                     pUser.save(null, {
                         success: function (user) {

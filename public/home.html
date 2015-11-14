@@ -1,249 +1,29 @@
 <!DOCTYPE html>
-<body lang='en'>
 <head>
     <meta charset='utf-8' />
-    <title>Cloud Code Demo - 3 - Parse.Cloud.httpRequest</title>
+    <title>Home - MandapTak</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/cropper.min.css" rel="stylesheet">
+	<link href="css/main.css" rel="stylesheet">
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="js/jquery-ui.min.js"></script>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
-    <style type="text/css">
-        .bs-example {
-            margin: 20px;
-        }
-    </style>
+	<script src="js/cropper.min.js"></script>
+	<script src="js/main.js"></script>
 </head>
 <body>
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Profile</h4>
-            </div>
-            <div class="modal-body" style="float:none">
-                <form id="profileForm">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Name:</label>
-                                <input type="text" class="form-control" id="name" placeholder="Enter name">
-                            </div>
-                            <div class="form-group">
-                                <label>Gender:</label>
-                                <select id="genderSelect" class="selectpicker" class="form-control"
-                                        onchange="showOptionsAge(this)">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Date Of Birth:</label>
-                                <input type="date" class="form-control" id="dob" placeholder="Enter Date of Birth">
-                            </div>
-                            <div class="form-group">
-                                <label>Time Of Birth:</label>
-                                <input type="time" class="form-control" id="tob" placeholder="Enter Time of Birth">
-                            </div>
-                            <div class="form-group ui-widget">
-                                <label>Birth Place:</label>
-                                <input type="text" class="form-control" id="bp" placeholder="Enter Birth Place">
-                            </div>
-                            <div class="form-group ui-widget">
-                                <label>Current Location:</label>
-                                <input type="text" class="form-control" id="cl" placeholder="Enter Current Location">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Weight:</label>
-                                <input type="number" class="form-control" id="weight" placeholder="Enter Weight">
-                            </div>
-                            <div class="form-group">
-                                <label>Height:</label>
-                                <input type="number" class="form-control" id="height" placeholder="Enter Height">
-                            </div>
-                            <div class="form-group">
-                                <label>Want To Work After Marriage:</label>
-                                <select id="workSelect" class="selectpicker" class="form-control">
-                                    <option value="0">May be</option>
-                                    <option value="1">Yes</option>
-                                    <option value="2">No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group ui-widget">
-                                <label>Religion:</label>
-                                <input type="text" class="form-control" id="rel" placeholder="Enter Religion">
-                            </div>
-                            <div class="form-group">
-                                <label>Caste:</label>
-                                <input type="text" class="form-control" id="caste" placeholder="Enter Caste">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Manglik Status:</label>
-                                <select id="manglikSelect" class="selectpicker" class="form-control"
-                                        onchange="showOptionsManglik(this)">
-                                    <option value="0">Don't Know</option>
-                                    <option value="1">Yes</option>
-                                    <option value="2">No</option>
-                                </select>
-                            </div>
-                            <div class="form-group ui-widget">
-                                <label>Industry:</label>
-                                <input type="text" class="form-control" id="work" placeholder="Enter Work">
-                            </div>
-                            <div class="form-group">
-                                <label>Designation:</label>
-                                <input type="text" class="form-control" id="desig" placeholder="Enter Designation">
-                            </div>
-                            <div class="form-group">
-                                <label>Company:</label>
-                                <input type="text" class="form-control" id="comp" placeholder="Enter Company">
-                            </div>
-                            <div class="form-group">
-                                <label>Current Income(per annum):</label>
-                                <input type="number" class="form-control" id="income"
-                                       placeholder="Enter Current Income">
-                            </div>
-                            <div class="form-group ui-widget">
-                                <label>Education:</label>
-                                <input type="text" class="form-control" id="edu" placeholder="Enter Education">
-                                <input type="text" class="form-control" id="spe" placeholder="Enter Specialization">
-                            </div>
-                        </div>
-                    </div>
-                    <!--
-                     Hidden fields
-                    -->
-                    <div class="form-group">
-                        <label></label>
-                        <input type="hidden" class="form-control" id="bpobj">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="clobj">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="relobj">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="casteobj">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="eduobj">
-                        <input type="hidden" class="form-control" id="speobj">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="indusobj">
-                    </div>
-                    <!-- Hidden Fields-->
-
-
-                    <div class="form-group hidden">
-                        <!--<label>Browse Image:</label>-->
-                        <!--<input type='file' onchange="readURL(this);"/>-->
-                        <img id="blah" src="user.png" alt="your image" class="images"/>
-                    </div>
-
-                    <input class="btn btn-primary" type="button" value="SaveProfile" onclick="saveProfile()"/>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-<button class='btn btn-primary' data-toggle='modal' data-target='#myModal' >Add Profile</button>;
-
-<script src='https://www.parsecdn.com/js/parse-1.2.18.min.js'></script>
-
-<script>
-    Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
-
-
-    function getAllProfiles() {
-        Parse.Cloud.run('getAllProfiles', {}, {
-            success: function(result) {
-            },
-            error: function(error) {
-
-            }
-        });
-    }
-    function addAnUser()
-    {
-        var name=document.getElementById("name").value;
-        var mob=document.getElementById("mob").value;
-        var gender=document.getElementById("sex").value;
-
-        var birthDay=document.getElementById("bday").value;
-        var birthTime=document.getElementById("btime").value;
-
-        var birthPlace=document.getElementById("bplace").value;
-        var currentLocation=document.getElementById("location").value;
-
-        var weigth=document.getElementById("weight").value;
-        var height=document.getElementById("height").value;
-
-        var religion=document.getElementById("religion").value;
-        var caste=document.getElementById("caste").value;
-        var manglikStatus=document.getElementById("manglik").value;
-
-        var work=document.getElementById("working").value;
-        var designation=document.getElementById("designation").value;
-
-        var company=document.getElementById("company").value;
-        var ctc=document.getElementById("ctc").value;
-
-        var edu1=document.getElementById("edu1").value;
-        var edu2=document.getElementById("edu2").value;
-
-        var edu3=document.getElementById("edu3").value;
-        var wam=document.getElementById("wam").value;
-        Parse.Cloud.run('addUsers', {
-            username: name,
-            number:mob,
-            gender:gender,
-            dob:birthDay,
-            tob:birthTime,
-            bplace:birthPlace,
-            currloc:currentLocation,
-            weight:weigth,
-            height:height,
-            religion:religion,
-            caste:caste,
-            manglik:manglikStatus,
-            working:work,
-            desig:designation,
-            comp:company,
-            income: ctc,
-            edu1:edu1,
-            edu2:edu2,
-            edu3:edu3,
-            wam:wam,
-            adminId:'2BohswJjfi',
-            relation:'Admin'
-        }, {
-            success: function(result) {
-                alert("Aded");
-            },
-            error: function(error) {
-                alert("Not added.");
-            }
-        });
-    }
-
-</script>
-<script src="js/editProfile.js"></script>
+	<div>
+		<img class="img-responsive cropper-hidden" src="img/image.jpg"></img>
+		<div class="cropper-container cropper-bg col-md-6">
+			<div class="cropper-canvas">
+				<img src="img/image.jpg"></img>
+			</div>
+			<div class="cropper-drag-box cropper-modal cropper-crop"></div>
+			<div class="cropper-crop-box"></div>
+		</div>
+	</div>
 </body>
 </html>
 

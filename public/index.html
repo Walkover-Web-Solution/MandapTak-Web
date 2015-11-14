@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang='en'>
 <head>
-    <meta charset='utf-8'/>
+    <meta charset='utf-8' />
     <title>MandapTak</title>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
     <!--<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />-->
@@ -12,284 +12,352 @@
     <script src="js/jquery-ui.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.cropit.js"></script>
+
+    <!-- for image resize and crop -->
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+    <!--<link rel="stylesheet" type="text/css" href="css/demo.css" />-->
+    <link rel="stylesheet" type="text/css" href="css/component.css" />
+
+    <!--<script src="js/component.js"></script>-->
+    <!--<link rel="shortcut icon" href="../favicon.ico">-->
+    <!--<link rel="stylesheet" type="text/css" href="css/normalize.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="css/demo.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="css/component.css">-->
+    <!--&lt;!&ndash;[if IE]>-->
+    <!--<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>-->
+    <!--<script src="js/editProfile.js"></script>-->
+    <!--<![endif]&ndash;&gt;-->
+	
+	<style>
+      .cropit-image-preview {
+        background-color: #f8f8f8;
+        background-size: cover;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-top: 7px;
+        width: 250px;
+        height: 250px;
+        cursor: move;
+      }
+
+      .cropit-image-background {
+        opacity: .2;
+        cursor: auto;
+      }
+
+      .image-size-label {
+        margin-top: 10px;
+      }
+
+      .crop-input {
+        display: block;
+      }
+
+      .export {
+        margin-top: 10px;
+      }
+    </style>
+	
 </head>
-<body >
-<!--<body onload="jsfunction(1)">-->
-<div class="container">
-    <span>
-        <h2>Profile Table</h2>
-        <div class="ui-widget">
-            Sort Profiles
-            <select id="sorted" onchange="sortByCompleteProfile()">
-                <option value="0">All</option>
-                <option value="1">True</option>
-                <option value="2">False</option>
-            </select>
-        </div>
-
-        <div class="ui-widget">
-            <label>Search User By Number:</label>
-            <br>
-            <label>Select Agent Number</label>
-            <select id="forAgents" >
-                <option></option>
-            </select>
-            <label>Enter User Number</label>
-            <input type="text"  id="searchByNumber" placeholder="Enter Number">
-            <button type="button" class="btn btn-default btn-sm" onclick="searchProfileForAgent()">Go</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="reset()">Reset</button>
-        </div>
-    </span>
-
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Mobile number</th>
-            <th>Name</th>
-            <th>isComplete</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody id="profileTable">
-
-        </tbody>
-    </table>
-    <ul class="pager">
-        <li><a onclick="jsfunction(0)" href="#">Previous</a></li>
-        <li><input type="text" id="pageno" value="1" style="width:40px; text-align: center"></li>
-        <li><button type="button" class="btn btn-default" onclick="navigateToPage()">Go</button></li>
-        <li><a onclick="jsfunction(1)" href="#" >Next</a></li>
-        <li id="pageLimit" onload="profileCount()"></li>
-
-    </ul>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-    <div class="modal-dialog modal-lg ">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit Profile</h4>
+<body>
+    <div class="container">
+        <span>
+            <h2>Profile Table</h2>
+            <div class="ui-widget">
+                Sort Profiles
+                <select id="sorted" onchange="sortByCompleteProfile()">
+                    <option value="0">All</option>
+                    <option value="1">True</option>
+                    <option value="2">False</option>
+                </select>
             </div>
-            <div class="modal-body" style="float:none">
-                <form id="profileForm">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Name:</label>
-                                <input type="text" class="form-control" id="name" placeholder="Enter name">
+            <div class="ui-widget" style="margin-bottom: 10px;">
+                <label>Search User By Number:</label>
+                <br>
+				<div class="row">
+				<div class="col-md-3">
+					<div class="form-group">
+						<label>Select Agent Number</label>
+						<select id="forAgents">
+							<option></option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label>Enter User Number</label>
+						<input type="text" id="searchByNumber" placeholder="Enter Number">
+					</div>
+				</div>
+				</div>
+                <button type="button" class="btn btn-default btn-sm" onclick="searchProfileForAgent()">Go</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="reset()">Reset</button>
+            </div>
+        </span>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Mobile number</th>
+                    <th>Name</th>
+                    <th>isComplete</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="profileTable"></tbody>
+        </table>
+        <ul class="pager">
+            <li><a onclick="jsfunction(0)" href="#">Previous</a></li>			
+            <li><a onclick="jsfunction(1)" href="#">Next</a></li>
+            <li><input type="text" id="pageno" value="1" style="width:40px; text-align: center"></li>
+            <li><a href="#" onclick="navigateToPage()">Go</a></li>
+            <li id="pageLimit" onload="profileCount()"></li>
+        </ul>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Profile</h4>
+                </div>
+                <div class="modal-body" style="float:none">
+                    <form id="profileForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Enter name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Gender:</label>
+                                    <select id="genderSelect" class="selectpicker" class="form-control">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date Of Birth:</label>
+                                    <input type="date" class="form-control" id="dob" placeholder="Enter Date of Birth">
+                                </div>
+                                <div class="form-group">
+                                    <label>Time Of Birth:</label>
+                                    <input type="time" class="form-control" id="tob" placeholder="Enter Time of Birth">
+                                </div>
+                                <div class="form-group ui-widget">
+                                    <label>Birth Place:</label>
+                                    <input type="text" class="form-control" id="bp" placeholder="Enter Birth Place">
+                                </div>
+                                <div class="form-group ui-widget">
+                                    <label>Current Location:</label>
+                                    <input type="text" class="form-control" id="cl" placeholder="Enter Current Location">
+                                </div>
+                                <div class="form-group">
+                                    <label>Weight:</label>
+                                    <input type="number" class="form-control" id="weight" placeholder="Enter Weight">
+                                </div>
+                                <div class="form-group">
+                                    <label>Height:</label>
+                                    <input type="number" class="form-control" id="height" placeholder="Enter Height">
+                                </div>
+                                <div class="form-group">
+                                    <label>Want To Work After Marriage:</label>
+                                    <select id="workSelect" class="selectpicker" class="form-control">
+                                        <option value="0">May be</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
+                                    </select>
+                                </div>
+								<div class="image-editor form-group">
+								  <input type="file" class="cropit-image-input">
+								  <div class="cropit-image-preview"></div>
+								  <div class="image-size-label">
+									Resize image
+								  </div>
+								  <input type="range" class="cropit-image-zoom-input crop-input">
+								  <a href="javascript:void(0)" class="export">show preview</a>
+								</div>
                             </div>
-                            <div class="form-group">
-                                <label>Gender:</label>
-                                <select id="genderSelect" class="selectpicker" class="form-control">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Date Of Birth:</label>
-                                <input type="date" class="form-control" id="dob" placeholder="Enter Date of Birth">
-                            </div>
-                            <div class="form-group">
-                                <label>Time Of Birth:</label>
-                                <input type="time" class="form-control" id="tob" placeholder="Enter Time of Birth">
-                            </div>
-                            <div class="form-group ui-widget">
-                                <label>Birth Place:</label>
-                                <input type="text" class="form-control" id="bp" placeholder="Enter Birth Place">
-                            </div>
-                            <div class="form-group ui-widget">
-                                <label>Current Location:</label>
-                                <input type="text" class="form-control" id="cl" placeholder="Enter Current Location">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Weight:</label>
-                                <input type="number" class="form-control" id="weight" placeholder="Enter Weight">
-                            </div>
-                            <div class="form-group">
-                                <label>Height:</label>
-                                <input type="number" class="form-control" id="height" placeholder="Enter Height">
-                            </div>
-                            <div class="form-group">
-                                <label>Want To Work After Marriage:</label>
-                                <select id="workSelect" class="selectpicker" class="form-control">
-                                    <option value="0">May be</option>
-                                    <option value="1">Yes</option>
-                                    <option value="2">No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group ui-widget">
-                                <label>Religion:</label>
-                                <input type="text" class="form-control" id="rel" placeholder="Enter Religion">
-                            </div>
-                            <div class="form-group">
-                                <label>Caste:</label>
-                                <input type="text" class="form-control" id="caste" placeholder="Enter Caste">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Manglik Status:</label>
-                                <select id="manglikSelect" class="selectpicker" class="form-control">
-                                    <option value="0">Don't Know</option>
-                                    <option value="1">Yes</option>
-                                    <option value="2">No</option>
-                                </select>
-                            </div>
-                            <div class="form-group ui-widget">
-                                <label>Industry:</label>
-                                <input type="text" class="form-control" id="work" placeholder="Enter Work">
-                            </div>
-                            <div class="form-group">
-                                <label>Designation:</label>
-                                <input type="text" class="form-control" id="desig" placeholder="Enter Designation">
-                            </div>
-                            <div class="form-group">
-                                <label>Company:</label>
-                                <input type="text" class="form-control" id="comp" placeholder="Enter Company">
-                            </div>
-                            <div class="form-group">
-                                <label>Current Income(per annum):</label>
-                                <input type="number" class="form-control" id="income"
-                                       placeholder="Enter Current Income">
-                            </div>
-                            <div class="form-group ui-widget">
-                                <label>Education:</label>
-                                <input type="text" class="form-control" id="edu" placeholder="Enter Education">
-                                <input type="text" class="form-control" id="spe" placeholder="Enter Specialization">
-                            </div>
-                            <!--<div class="form-group ui-widget">-->
+                            <div class="col-md-6">
+                                <div class="form-group ui-widget">
+                                    <label>Religion:</label>
+                                    <input type="text" class="form-control" id="rel" placeholder="Enter Religion">
+                                </div>
+                                <div class="form-group">
+                                    <label>Caste:</label>
+                                    <input type="text" class="form-control" id="caste" placeholder="Enter Caste">
+                                </div>
+                                <div class="form-group">
+                                    <label>Manglik Status:</label>
+                                    <select id="manglikSelect" class="selectpicker" class="form-control">
+                                        <option value="0">Don't Know</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group ui-widget">
+                                    <label>Industry:</label>
+                                    <input type="text" class="form-control" id="work" placeholder="Enter Work">
+                                </div>
+                                <div class="form-group">
+                                    <label>Designation:</label>
+                                    <input type="text" class="form-control" id="desig" placeholder="Enter Designation">
+                                </div>
+                                <div class="form-group">
+                                    <label>Company:</label>
+                                    <input type="text" class="form-control" id="comp" placeholder="Enter Company">
+                                </div>
+                                <div class="form-group">
+                                    <label>Current Income(per annum):</label>
+                                    <input type="number" class="form-control" id="income"
+                                           placeholder="Enter Current Income">
+                                </div>
+                                <div class="form-group ui-widget">
+                                    <label>Education:</label>
+                                    <input type="text" class="form-control" id="edu" placeholder="Enter Education">
+                                    <input type="text" class="form-control" id="spe" placeholder="Enter Specialization">
+                                </div>
+								<div class="form-group">
+									<label>Preview Image:</label>
+									<img id="blah" src="#" alt="your image" class="images" />
+								</div>
+                                <!--<div class="form-group ui-widget">-->
                                 <!--<label>User Name:</label>-->
                                 <!--<input type="text" class="form-control" id="username" placeholder="Enter User name">-->
-                            <!--</div>-->
-                        </div>
-                    </div>
-                    <!--
-                     Hidden fields
-                    -->
-                    <div class="form-group">
-                        <label></label>
-                        <input type="hidden" class="form-control" id="bpobj">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="clobj">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="relobj">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="casteobj">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="eduobj">
-                        <input type="hidden" class="form-control" id="speobj">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="indusobj">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="requiredUserId">
-                    </div>
-                    <!-- Hidden Fields-->
-
-
-                    <!--<div class="form-group hidden">-->
-                    <div class="form-group">
-                        <label>Browse Image:</label>
-                        <input type='file' onchange="readURL(this);"/>
-                        <img id="blah" src="#" alt="your image" class="images"/>
-                        <!--<button class='btn btn-primary' data-toggle='modal' data-target='#imageModal' onclick='uploadImage(" + JSON.stringify(result[i]) + ")'>Upload</button>-->
-                        <!--<img id="blah" src="user.png" alt="your image" class="images"/>-->
-                    </div>
-
-                    <!--<input class="btn btn-primary" type="button" value="SaveProfile" onclick="saveProfile()"/>-->
-                    <button type="button" class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-<div class="modal fade" id="imgModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-    <div class="modal-dialog modal-lg ">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
-                <h4 class="modal-title">Login</h4>
-            </div>
-            <div class="modal-body" style="float:none">
-                <form id="loginForm">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Number:</label>
-                                <input type="text" class="form-control" id="usernumber" placeholder="Enter Number">
+                                <!--</div>-->
                             </div>
-                            <div class="form-group">
-                                <label>Password:</label>
-                                <input type="password" class="form-control" id="userpasword" placeholder="Enter Password">
-                            </div>
-
+							
+						
+                        
+						</div>
+                        <!--
+                         Hidden fields
+                        -->
+                        <div class="form-group">
+                            <label></label>
+                            <input type="hidden" class="form-control" id="bpobj">
                         </div>
-                    </div>
-                    <button type="button" class="btn btn-primary" onclick="doLogin()">Submit</button>
-                </form>
-            </div>
-        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="clobj">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="relobj">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="casteobj">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="eduobj">
+                            <input type="hidden" class="form-control" id="speobj">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="indusobj">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="requiredUserId">
+                        </div>
+                        <!-- Hidden Fields-->
+                        <!--<div class="form-group hidden">-->
+						
+						
+						<script>
+						  $(function() {
+							$('.image-editor').cropit({
+							  imageState: {
+								src: '/img/user.png',
+							  },
+							});
 
-    </div>
-</div>
-<!--
-Progress Bar
--->
-<div id="pleaseWaitDialog" class="modal" data-backdrop="static" data-keyboard="false" aria-hidden="true"
-     style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 id="textToShow">Saving...</h1>
-            </div>
-            <div class="modal-body">
-                <div class="progress progress-striped active">
-                    <div class="progress-bar" style="width: 100%;"></div>
+							$('.export').click(function(event) {
+							  event.preventDefault();
+							  var imageData = $('.image-editor').cropit('export');
+							  $('#blah').attr('src', imageData);
+							});							
+						  });
+						</script>
+						
+                        <!--<script src="js/jquery-2.1.1.min.js"></script>-->
+                        <!--<script src="js/component.js"></script>-->
+                        <!--<input class="btn btn-primary" type="button" value="SaveProfile" onclick="saveProfile()"/>-->
+                        <button type="button" class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
+    <div class="modal fade" id="imgModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                    <h4 class="modal-title">Login</h4>
+                </div>
+                <div class="modal-body" style="float:none">
+                    <form id="loginForm">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label>Number:</label>
+                                    <input type="text" class="form-control" id="usernumber" placeholder="Enter Number">
+                                </div>
+                                <div class="form-group">
+                                    <label>Password:</label>
+                                    <input type="password" class="form-control" id="userpasword" placeholder="Enter Password">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="doLogin()">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--
+    Progress Bar
+    -->
+    <div id="pleaseWaitDialog" class="modal" data-backdrop="static" data-keyboard="false" aria-hidden="true"
+         style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 id="textToShow">Saving...</h1>
+                </div>
+                <div class="modal-body">
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 </body>
 <script src='https://www.parsecdn.com/js/parse-1.2.18.min.js'></script>
 <script src="js/non-empty.js"></script>
 <script src="js/editProfile.js"></script>
 <script>
-    $(window).load(function(){
+    $(window).load(function () {
         $('#imgModal').modal('show');
     });
     $('#imgModal').modal({
         backdrop: 'static',
         keyboard: false
     });
-    (function() {
+    (function () {
         var elm = document.getElementById('forAgents'),
                 df = document.createDocumentFragment();
         Parse.Cloud.run('getAllAgents', {}, {
             success: function (result) {
-                for(var i = 0; i <result.length; i++) {
+                for (var i = 0; i < result.length; i++) {
                     var option = document.createElement('option');
                     option.value = result[i].id;
                     option.appendChild(document.createTextNode(result[i].get("username")));
@@ -306,4 +374,3 @@ Progress Bar
     }());
 </script>
 </html>
-

@@ -4,7 +4,9 @@
 var selectedProfile, uid, count = 0, order = 0;
 var picFile;
 var currentPageNo;
+
 Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
+
 function jsfunction(operation) {
     profileCount(order);
     var val = document.getElementById("pageno").value;
@@ -17,8 +19,35 @@ function jsfunction(operation) {
     }
     getAllProfiles(val, order);
 }
+
+function resizeImage(img){
+	var canvas = document.getElementById("previewImage");
+	var ctx = canvas.getContext("2d");
+	//var img = document.getElementById("blah");
+	var MAX_WIDTH = 400;
+	var MAX_HEIGHT = 300;
+	var width = img.width;
+	var height = img.height;
+	 
+	if (width > height) {
+	  if (width > MAX_WIDTH) {
+		height *= MAX_WIDTH / width;
+		width = MAX_WIDTH;
+	  }
+	} else {
+	  if (height > MAX_HEIGHT) {
+		width *= MAX_HEIGHT / height;
+		height = MAX_HEIGHT;
+	  }
+	}
+	canvas.width = width;
+	canvas.height = height;	
+	ctx.drawImage(img, 0, 0, width, height);	
+}
+
 function readURL(input) {
     if (input.files && input.files[0]) {
+		var img = document.createElement("img");
         var reader = new FileReader();
 
         reader.onload = function (e) {
@@ -26,9 +55,11 @@ function readURL(input) {
                 .attr('src', e.target.result)
                 .width(150)
                 .height(200);
+			img.src = e.target.result;
+			resizeImage(img);
         };
 
-        reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(input.files[0]);		
     }
 }
 function navigateToPage() {
@@ -44,23 +75,23 @@ function sortByCompleteProfile() {
     document.getElementById("pageno").value = 1;
     getAllProfiles(1, order);
 }
-function login() {
-    var ifLoggedin=false;
-    var userNumber=document.getElementById("usernumber").value;
-    var password=document.getElementById("userpasword").value;
-    Parse.Cloud.run('authenticate', {username: userNumber, password: password}, {
+function login(uName, pwd) {
+    var ifLoggedin = false;
+    Parse.Cloud.run('authenticate', { username: uName, password: pwd }, {
         success: function (result) {
             closeImageModal();
             jsfunction(1);
         },
         error: function (error) {
-            alert("Please Enter Correct Number and Password");
+            if(error.message.indexOf("invalid login") > -1){
+				alert("Invalid login parameters.");
+			}
         }
     });
 }
 
 function profileCount(order) {
-    Parse.Cloud.run('getProfileCount', {order: order}, {
+    Parse.Cloud.run('getProfileCount', { order: order }, {
         success: function (result) {
             count = result;
             document.getElementById("pageLimit").innerHTML = "Maximum Page Limit:" + Math.ceil(count / 10);
@@ -73,7 +104,7 @@ function profileCount(order) {
 function getAllProfiles(pageNo, order) {
     show("Loading...");
     currentPageNo = pageNo;
-    Parse.Cloud.run('getAllProfiles', {pageno: pageNo, order: order}, {
+    Parse.Cloud.run('getAllProfiles', { pageno: pageNo, order: order }, {
         success: function (result) {
             var html = "";
             for (var i = 0; i < result.length; i++) {
@@ -100,59 +131,59 @@ function editProfile(profile) {
     var objectId = profile.objectId;
 
 
-    Parse.Cloud.run("getProfile", {profileId: objectId}, {
-            success: function (result) {
-                console.log(result.get("userId").get("username"));
-                selectedProfile = result;
-                document.getElementById("name").value = selectedProfile.get("name");
-                document.getElementById("weight").value = selectedProfile.get("weight");
-                document.getElementById("height").value = selectedProfile.get("height");
-                dateSet = selectedProfile.get("dob");
-                if (dateSet != undefined)
-                    document.getElementById("dob").value = dateSet.getFullYear() + "-" + addZero((dateSet.getMonth() + 1)) + "-" + addZero(dateSet.getDate());//Date(selectedProfile.get("dob"));
-                var timeSet = selectedProfile.get("tob");
-                if (timeSet != undefined) {
-                    timeSet.setMinutes(timeSet.getMinutes() - 330);
-                    var hrs = timeSet.getHours();
-                    var mins = timeSet.getMinutes();
-                    document.getElementById("tob").value = addZero(hrs) + ":" + addZero(mins) + ":" + addZero(timeSet.getSeconds());
-                }
-                if (selectedProfile.get("religionId") != null)
-                    document.getElementById("rel").value = selectedProfile.get("religionId").get("name");
-                if (selectedProfile.get("casteId") != null)
-                    document.getElementById("caste").value = selectedProfile.get("casteId").get("name");
-                if (selectedProfile.get("industryId") != null)
-                    document.getElementById("work").value = selectedProfile.get("industryId").get("name");
-                if (selectedProfile.get("placeOfBirth") != null)
-                    document.getElementById("bp").value = selectedProfile.get("placeOfBirth").get("name") + "," + selectedProfile.get("placeOfBirth").get("Parent").get("name") + "," + selectedProfile.get("placeOfBirth").get("Parent").get("Parent").get("name");
-                if (selectedProfile.get("currentLocation") != null)
-                    document.getElementById("cl").value = selectedProfile.get("currentLocation").get("name") + "," + selectedProfile.get("currentLocation").get("Parent").get("name") + "," + selectedProfile.get("currentLocation").get("Parent").get("Parent").get("name");
-                if (selectedProfile.get("education1") != null) {
-                    document.getElementById("spe").value = selectedProfile.get("education1").get("name");
-                    document.getElementById("edu").value = selectedProfile.get("education1").get("degreeId").get("name");
-                }
-                document.getElementById("desig").value = selectedProfile.get("designation");
-                document.getElementById("income").value = selectedProfile.get("package");
-                document.getElementById("comp").value = selectedProfile.get("placeOfWork");
-                document.getElementById("comp").value = selectedProfile.get("placeOfWork");
-
+    Parse.Cloud.run("getProfile", { profileId: objectId }, {
+        success: function (result) {
+            console.log(result.get("userId").get("username"));
+            selectedProfile = result;
+            document.getElementById("name").value = selectedProfile.get("name");
+            document.getElementById("weight").value = selectedProfile.get("weight");
+            document.getElementById("height").value = selectedProfile.get("height");
+            dateSet = selectedProfile.get("dob");
+            if (dateSet != undefined)
+                document.getElementById("dob").value = dateSet.getFullYear() + "-" + addZero((dateSet.getMonth() + 1)) + "-" + addZero(dateSet.getDate());//Date(selectedProfile.get("dob"));
+            var timeSet = selectedProfile.get("tob");
+            if (timeSet != undefined) {
+                timeSet.setMinutes(timeSet.getMinutes() - 330);
+                var hrs = timeSet.getHours();
+                var mins = timeSet.getMinutes();
+                document.getElementById("tob").value = addZero(hrs) + ":" + addZero(mins) + ":" + addZero(timeSet.getSeconds());
             }
+            if (selectedProfile.get("religionId") != null)
+                document.getElementById("rel").value = selectedProfile.get("religionId").get("name");
+            if (selectedProfile.get("casteId") != null)
+                document.getElementById("caste").value = selectedProfile.get("casteId").get("name");
+            if (selectedProfile.get("industryId") != null)
+                document.getElementById("work").value = selectedProfile.get("industryId").get("name");
+            if (selectedProfile.get("placeOfBirth") != null)
+                document.getElementById("bp").value = selectedProfile.get("placeOfBirth").get("name") + "," + selectedProfile.get("placeOfBirth").get("Parent").get("name") + "," + selectedProfile.get("placeOfBirth").get("Parent").get("Parent").get("name");
+            if (selectedProfile.get("currentLocation") != null)
+                document.getElementById("cl").value = selectedProfile.get("currentLocation").get("name") + "," + selectedProfile.get("currentLocation").get("Parent").get("name") + "," + selectedProfile.get("currentLocation").get("Parent").get("Parent").get("name");
+            if (selectedProfile.get("education1") != null) {
+                document.getElementById("spe").value = selectedProfile.get("education1").get("name");
+                document.getElementById("edu").value = selectedProfile.get("education1").get("degreeId").get("name");
+            }
+            document.getElementById("desig").value = selectedProfile.get("designation");
+            document.getElementById("income").value = selectedProfile.get("package");
+            document.getElementById("comp").value = selectedProfile.get("placeOfWork");
+            document.getElementById("comp").value = selectedProfile.get("placeOfWork");
+
         }
+    }
     );
-//    function myFun(dateSet){
-//        (function () {
-//            var date = Date.parse(dateSet);
-//           //alert(date);
-//            var d=new Date(date);
-//            var day= d.getDate();
-//            var month= d.getMonth();
-//            var year= d.getFullYear();
-//            var str=year+"-"+month+"-"+
-//            field = document.querySelector('#dob');
-//            field.value =
-//            console.log(field.value);
-//
-//        })()
+    //    function myFun(dateSet){
+    //        (function () {
+    //            var date = Date.parse(dateSet);
+    //           //alert(date);
+    //            var d=new Date(date);
+    //            var day= d.getDate();
+    //            var month= d.getMonth();
+    //            var year= d.getFullYear();
+    //            var str=year+"-"+month+"-"+
+    //            field = document.querySelector('#dob');
+    //            field.value =
+    //            console.log(field.value);
+    //
+    //        })()
 
 }
 
@@ -186,83 +217,83 @@ function saveProfile() {
         profileObj.wantToWork = document.getElementById("workSelect").value;
 
         var profileSaved = new Parse.Object.extend("Profile");
-        Parse.Cloud.run("saveProfile", {profiletosave: profileObj}, {
-                success: function (result) {
-                    console.log(result);
-                    profileSaved = result;
-                },
-                error: function (error) {
-                    console.log("inside cloud function error");
-                    console.log(error);
-                }
+        Parse.Cloud.run("saveProfile", { profiletosave: profileObj }, {
+            success: function (result) {
+                console.log(result);
+                profileSaved = result;
+            },
+            error: function (error) {
+                console.log("inside cloud function error");
+                console.log(error);
             }
+        }
         ).then(function () {
 
-                var promises = $('.images').map(function (index, element) {
-                    var deferred = $.Deferred();
-                    var src = $(element).attr('src');
-                    var canvas = document.createElement('CANVAS');
-                    var ctx = canvas.getContext('2d');
-                    var img = new Image;
-                    img.crossOrigin = 'Anonymous';
-                    img.onload = function () {
-                        canvas.height = img.height;
-                        canvas.width = img.width;
-                        ctx.drawImage(img, 0, 0);
-                        var base64Img = canvas.toDataURL('image/png');
-                        // Clean up
-                        canvas = null;
-                        deferred.resolve(base64Img);
-                    };
-                    img.src = element.src;
-                    // to crop image
-                    cropImage(img.src);
-                    //
-                    return deferred;
-                });
-
-                $.when.apply($, promises).then(function () {
-                    var file;
-                    for (var i = 0; i < 1; i++) {
-                        file = new Parse.File("profile.jpg", {base64: arguments[i]}); // this part actually saves the image file to parse
-                        profileSaved.set("profilePic", file); // set this image to the corosponding column on our object
-                    }
-
-                    profileSaved.set("isComplete", true);
-
-                    // save the user object
-                    profileSaved.save(null, {
-                        success: function (user) {
-                            selectedProfile = user;
-                            close();
-
-                            $('#myModal').modal('hide');
-                            //alert("Profile Saved");
-                        },
-                        error: function (user, error) {
-                            console.log('Failed to create new object, with error code: ' + error.message);
-                        }
-                    }).then(function () {
-                        getAllProfiles(document.getElementById("pageno").value);
-                    });
-                });
-//                    try {
-//                        var fileUploadControl = $("#profilePhotoFileUpload")[0];
-//                        if (fileUploadControl.files.length > 0) {
-//                            console.log("inside if condition");
-//                            var file = fileUploadControl.files[0];
-//                            var name = "photo.jpg";
-//
-//                            var parseFile = new Parse.File(name, file);
-//
-//                            profileObj.picture = parseFile;
-//                        }
-//                    }
-//                    catch (exp) {
-//                        console.log("exception here");
-//                        console.log(exp.message);
-//                    }
+            var promises = $('.images').map(function (index, element) {
+                var deferred = $.Deferred();
+                var src = $(element).attr('src');
+                var canvas = document.createElement('CANVAS');
+                var ctx = canvas.getContext('2d');
+                var img = new Image;
+                img.crossOrigin = 'Anonymous';
+                img.onload = function () {
+                    canvas.height = img.height;
+                    canvas.width = img.width;
+                    ctx.drawImage(img, 0, 0);
+                    var base64Img = canvas.toDataURL('image/png');
+                    // Clean up
+                    canvas = null;
+                    deferred.resolve(base64Img);
+                };
+                img.src = element.src;
+                // to crop image
+                //cropImage(img.src);
+                //
+                return deferred;
             });
+
+            $.when.apply($, promises).then(function () {
+                var file;
+                for (var i = 0; i < 1; i++) {
+                    file = new Parse.File("profile.jpg", { base64: arguments[i] }); // this part actually saves the image file to parse
+                    profileSaved.set("profilePic", file); // set this image to the corosponding column on our object
+                }
+
+                profileSaved.set("isComplete", true);
+
+                // save the user object
+                profileSaved.save(null, {
+                    success: function (user) {
+                        selectedProfile = user;
+                        close();
+
+                        $('#myModal').modal('hide');
+                        //alert("Profile Saved");
+                    },
+                    error: function (user, error) {
+                        console.log('Failed to create new object, with error code: ' + error.message);
+                    }
+                }).then(function () {
+                    getAllProfiles(document.getElementById("pageno").value);
+                });
+            });
+            //                    try {
+            //                        var fileUploadControl = $("#profilePhotoFileUpload")[0];
+            //                        if (fileUploadControl.files.length > 0) {
+            //                            console.log("inside if condition");
+            //                            var file = fileUploadControl.files[0];
+            //                            var name = "photo.jpg";
+            //
+            //                            var parseFile = new Parse.File(name, file);
+            //
+            //                            profileObj.picture = parseFile;
+            //                        }
+            //                    }
+            //                    catch (exp) {
+            //                        console.log("exception here");
+            //                        console.log(exp.message);
+            //                    }
+        });
     }
 }
 
@@ -278,7 +309,7 @@ $(function () {
             doweUpdateAnything = false;
             if (selectedProfile.get("name") != undefined && selectedProfile.get("name") != null && selectedProfile.get("name") != "") {
                 console.log("we are in");
-                Parse.Cloud.run("ProfilePhotoSave", {"profile": selectedProfile.id}, {
+                Parse.Cloud.run("ProfilePhotoSave", { "profile": selectedProfile.id }, {
                     success: function (result) {
                         console.log("finally done");
 
@@ -294,7 +325,7 @@ $(function () {
 
     $("#bp").autocomplete({
         source: function (request, response) {
-            Parse.Cloud.run("getCities", {"searchThis": capitalizeFirstLetter(request.term)}, {
+            Parse.Cloud.run("getCities", { "searchThis": capitalizeFirstLetter(request.term) }, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -328,7 +359,7 @@ $(function () {
 
     $("#cl").autocomplete({
         source: function (request, response) {
-            Parse.Cloud.run("getCities", {"searchThis": capitalizeFirstLetter(request.term)}, {
+            Parse.Cloud.run("getCities", { "searchThis": capitalizeFirstLetter(request.term) }, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -363,7 +394,7 @@ $(function () {
     $("#rel").autocomplete({
 
         source: function (request, response) {
-            Parse.Cloud.run("getReligion", {"searchThis": capitalizeFirstLetter(request.term)}, {
+            Parse.Cloud.run("getReligion", { "searchThis": capitalizeFirstLetter(request.term) }, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -398,7 +429,7 @@ $(function () {
         source: function (request, response) {
             var religionId = document.getElementById("relobj").value;
             console.log(religionId);
-            Parse.Cloud.run("getCaste", {"searchThis": capitalizeFirstLetter(request.term), religion: religionId}, {
+            Parse.Cloud.run("getCaste", { "searchThis": capitalizeFirstLetter(request.term), religion: religionId }, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -431,7 +462,7 @@ $(function () {
 
     $("#work").autocomplete({
         source: function (request, response) {
-            Parse.Cloud.run("getIndustry", {"searchThis": capitalizeFirstLetter(request.term)}, {
+            Parse.Cloud.run("getIndustry", { "searchThis": capitalizeFirstLetter(request.term) }, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -464,7 +495,7 @@ $(function () {
 
     $("#edu").autocomplete({
         source: function (request, response) {
-            Parse.Cloud.run("getEducation", {"searchThis": capitalizeFirstLetter(request.term)}, {
+            Parse.Cloud.run("getEducation", { "searchThis": capitalizeFirstLetter(request.term) }, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -500,7 +531,7 @@ $(function () {
         source: function (request, response) {
             var eduId = document.getElementById("eduobj").value;
             console.log(eduId);
-            Parse.Cloud.run("getSpecial", {"searchThis": capitalizeFirstLetter(request.term), education: eduId}, {
+            Parse.Cloud.run("getSpecial", { "searchThis": capitalizeFirstLetter(request.term), education: eduId }, {
                 success: function (result) {
                     showThisResult = [];
                     for (var i = 0; i < result.length; i++) {
@@ -535,10 +566,10 @@ $(function () {
             var userid = document.getElementById("forAgents").value;
             if (userid == "")
                 alert("Please Select Agent Number First");
-            Parse.Cloud.run("getUserName", {"searchThis": request.term, "userid": userid}, {
+            Parse.Cloud.run("getUserName", { "searchThis": request.term, "userid": userid }, {
                 success: function (result) {
                     showThisResult = [];
-                    if (result.length == 0 && userid !== "")alert("No matching result found for this number");
+                    if (result.length == 0 && userid !== "") alert("No matching result found for this number");
 
                     for (var i = 0; i < result.length; i++) {
                         var obj = {};
@@ -634,7 +665,7 @@ function addAnUser() {
 
 function searchProfileForAgent() {
     var number = document.getElementById("searchByNumber").value;
-    if (number == "" && document.getElementById("searchByNumber").value == "")reset();
+    if (number == "" && document.getElementById("searchByNumber").value == "") reset();
     document.getElementById("pageno").value = 1;
     document.getElementById("pageLimit").innerHTML = "Maximum Page Limit :1";
     getProfileForAgent(number);
@@ -642,7 +673,7 @@ function searchProfileForAgent() {
 function getProfileForAgent(number) {
     show("Loading...");
     var pId = document.getElementById("requiredUserId").value;// this is profileID in table UserProfile, Need userId
-    Parse.Cloud.run('getProfileForAgent', {userId: pId}, {
+    Parse.Cloud.run('getProfileForAgent', { userId: pId }, {
         success: function (result) {
             var html = "";
             for (var i = 0; i < result.length; i++) {
@@ -670,17 +701,24 @@ function close() {
 function closeImageModal() {
     $('#pleaseWaitDialog').modal('hide');
     $('#imgModal').modal('hide');
-    alert("sunno");
 
 }
 function reset() {
     location.reload();
 }
 function cropImage(srcImage) {
-    alert("helo ");
     document.getElementById("myImg").src = srcImage;
 }
-function doLogin()
-{
-    var ifLoggedin=login();
+function doLogin() {
+    var uName = document.getElementById("usernumber").value;
+    var uPwd = document.getElementById("userpasword").value;
+    if (uName == "" || uName == null || uName == undefined) {
+        alert("Username should not be empty");
+        return;
+    }
+    if (uPwd == "" || uPwd == null || uPwd == undefined) {
+        alert("Password should not be empty");
+        return;
+    }
+    var ifLoggedin = login(uName, uPwd);
 }

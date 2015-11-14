@@ -13,21 +13,6 @@ var layerKeyID = 'layer:///keys/a0d65cd2-513f-11e5-8095-7f0ce21e7c8f';   // Shou
 var privateKey = fs.readFileSync('cloud/layer-parse-module/keys/layer-key.js');
 layer.initialize(layerProviderID, layerKeyID, privateKey);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var deductCredit = 10;
 
 Parse.Cloud.afterSave("User", function (request) {
@@ -57,7 +42,7 @@ Parse.Cloud.define("likeAndFind", function (request, response) {
     likeQuery.set("likeProfileId", { "__type": "Pointer", "className": "Profile", "objectId": likeProfileid });
     //likeQuery.setACL(new Parse.ACL(request.user));
     likeQuery.save(null, {
-        success: function (likeResult) {            
+        success: function (likeResult) {
             console.log("successfully saved entry to db.");
             console.log("now searching for matching or not.");
             var findMatch = new Parse.Query("LikedProfile");
@@ -79,7 +64,7 @@ Parse.Cloud.define("likeAndFind", function (request, response) {
                             });
                         }, function (error) {
                             response.success(likeResult.id);
-                        });                        
+                        });
                     }
                     else {
                         matchFoundArray.push(matchResult);
@@ -101,7 +86,7 @@ Parse.Cloud.define("likeAndFind", function (request, response) {
                                 data: {
                                     alert: userName + " liked you back!",
                                     username: userName,
-                                    profileid:userProfileid
+                                    profileid: userProfileid
                                 }
                             }, {
                                 success: function (result) {
@@ -127,7 +112,7 @@ Parse.Cloud.define("likeAndFind", function (request, response) {
                                 });
                             }, function (error) {
                                 response.success(matchFound);
-                            });                            
+                            });
                         });
                     }
                 },
@@ -206,6 +191,17 @@ Parse.Cloud.define("givePermissiontoNewUser", function (request, response) {
                                             success: function (dResult) {
                                                 console.log("Credit deducted successfully.");
                                                 response.success("Permission given successfully.");
+                                                //we have to write a code here to make an entry in transaction table to keep record.
+                                                Parse.Cloud.run("transactionEntry", { from: request.user.id, to: user[0].id, amount: deductCredit, purpose: "permission" }, {
+                                                    success: function (result) {
+                                                        console.log("do transaction transactionEntry result : " + result);
+                                                        response.success(result);
+                                                    },
+                                                    error: function (error) {
+                                                        console.log("error in transaction entry. : " + error);
+                                                        response.error(error);
+                                                    }
+                                                });
                                             },
                                             error: function (error) {
                                                 console.log("Unable to deduct credit.");
@@ -293,7 +289,17 @@ Parse.Cloud.define("givePermissiontoNewUser", function (request, response) {
                                             sResult.save(null, {
                                                 success: function (dResult) {
                                                     console.log("Credit deducted successfully.");
-                                                    response.success("Permission given successfully.");
+                                                    Parse.Cloud.run("transactionEntry", { from: request.user.id, to: user.id, amount: deductCredit, purpose: "permission" }, {
+                                                        success: function (result) {
+                                                            console.log("do transaction transactionEntry result : " + result);
+                                                            //response.success(result);
+                                                            response.success("Permission given successfully.");
+                                                        },
+                                                        error: function (error) {
+                                                            console.log("error in transaction entry. : " + error);
+                                                            response.error(error);
+                                                        }
+                                                    });                                                    
                                                 },
                                                 error: function (error) {
                                                     console.log("Unable to deduct credit.");
@@ -409,7 +415,7 @@ Parse.Cloud.define("deleteDuplicateInstallations", function (request, response) 
             for (var i = 0; i < installations.length; i++) {
                 var installation = installations[i];
                 var deviceToken = installation.get("deviceToken");
-                var username = installation.get("user");                
+                var username = installation.get("user");
                 //if (deviceTokens.hasOwnProperty(deviceToken)) {
                 //    console.log("did delete installation " + installation);
                 //    installation.destroy();

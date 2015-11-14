@@ -11,11 +11,14 @@ var resizeableImage = function(image_target) {
       constrain = false,
       min_width = 60, // Change as required
       min_height = 60,
-      max_width = 800, // Change as required
-      max_height = 900,
-      resize_canvas = document.createElement('canvas');
+      max_width = 2100, // Change as required
+      max_height = 2500,
+	  croped = false,
+      resize_canvas = document.createElement('canvas');	  
 
   init = function(){
+	  if(croped)
+		  return;
 
     // When resizing, we will always use this copy of the original as the base
     orig_src.src=image_target.src;
@@ -122,8 +125,10 @@ var resizeableImage = function(image_target) {
   resizeImage = function(width, height){
     resize_canvas.width = width;
     resize_canvas.height = height;
+	orig_src.src = image_target.src;
     resize_canvas.getContext('2d').drawImage(orig_src, 0, 0, width, height);   
     $(image_target).attr('src', resize_canvas.toDataURL("image/png"));  
+	$('.blah').attr('src', resize_canvas.toDataURL("image/png"));
   };
 
   startMoving = function(e){
@@ -190,7 +195,7 @@ var resizeableImage = function(image_target) {
     crop_canvas.height = height;
     
     crop_canvas.getContext('2d').drawImage(image_target, left, top, width, height, 0, 0, width, height);
-    window.open(crop_canvas.toDataURL("image/png"));
+	$('.blah').attr('src', crop_canvas.toDataURL("image/png"));
   }
 
   init();
