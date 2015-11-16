@@ -520,4 +520,63 @@ Parse.Cloud.define("savePhoto", function (request, response) {
     });
 });
 
+Parse.Cloud.define("changeUserNameAndUserRelation",function(request,response){
+    var userId=request.params.userId;
+    var profileId=request.params.profileId;
+    var username=request.params.username;
+    var relation=request.params.relation;
+    Parse.Cloud.useMasterKey();
+
+    var query = new Parse.Query("_User");
+    query.equalTo("objectId",userId);
+    query.find().then(function (result) {
+        result[0].set("username",username);
+        result[0].save(null,{
+            success: function (user) {
+                var query2=new Parse.Query("UserProfile");
+                query2.equalTo("profileId",{"__type": "Pointer", "className": "Profile", "objectId": profileId});
+                query2.equalTo("userId",{"__type": "Pointer", "className": "_User", "objectId": userId});
+                query2.find().then(function (result) {
+                    result[0].set("relation",relation);
+                    result[0].save(null,{
+                        success:function(){
+                            response.success("success");
+                        },
+                        error: function (error) {
+                            response.error(error);
+                        }
+                    });
+                });
+            },
+            error: function (user, error) {
+                console.log('Failed to change username, with error code: ' + error.message);
+                response.error(error);
+            }
+        });
+    });
+
+});
+//
+//Parse.Cloud.define("changeUserNameAndUserRelation1",function(request,response){
+//    var userId=request.params.userId;
+//    var profileId=request.params.profileId;
+//    var username=request.params.username;
+//    var relation=request.params.relation;
+//    Parse.Cloud.useMasterKey();
+//    var query=new Parse.Query("UserProfile");
+//    query.include();
+//    query.equalTo("userId",{"__type": "Pointer", "className": "_User", "objectId": userId});
+//    query.equalTo("profileId",{"__type": "Pointer", "className": "Profile", "objectId": profileId});
+//    query.find().then(function (result) {
+//        result[0].set("relation",relation);
+//        result[0].save(null, {
+//            success: function (user) {
+//
+//            },
+//            error: function (user, error) {
+//                response.error("can not change relation with error code :"+error)
+//            }
+//        });
+//    });
+//});
 //added by Utkarsh
