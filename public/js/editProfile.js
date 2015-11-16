@@ -190,7 +190,7 @@ function editProfile(profile) {
 var doweUpdateAnything = false;
 function saveProfile() {
     doweUpdateAnything = true;
-    //to validate if user has filled complete form
+    //to validate if user has filled the form
     var ifFilled = required();
     // var parseFile = new Parse.File(picFile.name, picFile);
     if (ifFilled) {
@@ -209,7 +209,6 @@ function saveProfile() {
         profileObj.caste = document.getElementById("casteobj").value;
         profileObj.manglik = document.getElementById("manglikSelect").value;
         profileObj.industry = document.getElementById("indusobj").value;
-        //alert(typeof profileObj.industry);
         profileObj.designation = document.getElementById("desig").value;
         profileObj.company = document.getElementById("comp").value;
         profileObj.package = document.getElementById("income").value;
@@ -304,7 +303,7 @@ $(function () {
 
     $('#myModal').on('hidden.bs.modal', function () {
         console.log("event called");
-        // do something…
+        // do somethingï¿½
         if (doweUpdateAnything) {
             doweUpdateAnything = false;
             if (selectedProfile.get("name") != undefined && selectedProfile.get("name") != null && selectedProfile.get("name") != "") {
@@ -704,8 +703,14 @@ function closeImageModal() {
 
 }
 function reset() {
-    location.reload();
+    //location.reload();
+    var element=document.getElementById("forAgents");
+    element.value ="";
+    var element2=document.getElementById("searchByNumber");
+    element2.value ="";
+    getAllProfiles(currentPageNo,order);
 }
+
 function cropImage(srcImage) {
     document.getElementById("myImg").src = srcImage;
 }
