@@ -6,6 +6,7 @@ var registerUser = require("cloud/registerUser.js");
 var filterProfileObj = require("cloud/filterProfiles.js");
 var profileObj = require("cloud/profiles.js");
 var agentObj = require("cloud/agent.js");
+var transObj = require("cloud/transactions.js");
 var fs = require('fs');
 var layer = require('cloud/layer-parse-module/layer-module.js');
 var layerProviderID = 'layer:///providers/029e1ec6-45b7-11e5-b6b1-55c9da086561';  // Should have the format of layer:///providers/<GUID>
