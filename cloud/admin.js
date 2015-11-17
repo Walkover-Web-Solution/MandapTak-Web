@@ -556,10 +556,6 @@ Parse.Cloud.define("changeUserNameAndUserRelation",function(request,response){
     });
 
 });
-Parse.CLloud.define("getImage",function(request,response){
-    Parse.Cloud.useMasterKey();
-    va pic=
-});
 //
 //Parse.Cloud.define("changeUserNameAndUserRelation1",function(request,response){
 //    var userId=request.params.userId;

@@ -165,25 +165,21 @@ function editProfile(profile) {
             document.getElementById("desig").value = selectedProfile.get("designation");
             document.getElementById("income").value = selectedProfile.get("package");
             document.getElementById("comp").value = selectedProfile.get("placeOfWork");
-            document.getElementById("comp").value = selectedProfile.get("placeOfWork");
+            //document.getElementById("comp").value = selectedProfile.get("placeOfWork");
+            if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
+                document.getElementById("blah").src = selectedProfile.get("profilePic")._url;
+                var yourImg = document.getElementById('blah');
+                if(yourImg && yourImg.style) {
+                    yourImg.style.height = '248px';
+                    yourImg.style.width = '248px';
+                }
+                }
+            else
+                document.getElementById("blah").src="#";
 
         }
     }
     );
-    //    function myFun(dateSet){
-    //        (function () {
-    //            var date = Date.parse(dateSet);
-    //           //alert(date);
-    //            var d=new Date(date);
-    //            var day= d.getDate();
-    //            var month= d.getMonth();
-    //            var year= d.getFullYear();
-    //            var str=year+"-"+month+"-"+
-    //            field = document.querySelector('#dob');
-    //            field.value =
-    //            console.log(field.value);
-    //
-    //        })()
 
 }
 
