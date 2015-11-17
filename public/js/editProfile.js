@@ -708,7 +708,10 @@ function reset() {
     element.value ="";
     var element2=document.getElementById("searchByNumber");
     element2.value ="";
-    getAllProfiles(currentPageNo,order);
+    document.getElementById("sorted").selectedIndex = 0;
+    profileCount(0);
+    document.getElementById("pageno").value = 1;
+    getAllProfiles(1,0);
 }
 
 function cropImage(srcImage) {

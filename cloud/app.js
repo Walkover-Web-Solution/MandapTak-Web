@@ -5,14 +5,20 @@
 
 // Global app configuration section
 app.set('views', 'cloud/views');  // Specify the folder to find templates
-app.set('view engine', 'ejs');    // Set the template engine
+app.set('view engine', 'jade');    // Set the template engine
 app.use(express.bodyParser());    // Middleware for reading request body
+
+
 
 // This is an example of hooking up a request handler with a specific request
 // path and HTTP verb using the Express routing API.
 app.get('/login', function(req, res) {
     res.set('Content-Type', 'text/plain');
     res.send('echoing: ' + req.body.message);
+});
+
+app.get('/', function (req, res) {
+    res.render('index', { title: 'Mandaptak'});
 });
 
 // // Example reading from the request query string of an HTTP get request.
