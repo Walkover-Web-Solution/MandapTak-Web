@@ -556,6 +556,15 @@ Parse.Cloud.define("changeUserNameAndUserRelation",function(request,response){
     });
 
 });
+Parse.Cloud.define("getImages", function (request,response) {
+    Parse.Cloud.useMasterKey();
+    var pid=request.params.profileId;
+    var query=new Parse.Query("Photo");
+    query.equalTo("profileId",{"__type": "Pointer", "className": "Profile", "objectId": pid});
+    query.find().then(function (result) {
+        response.success(result);
+    });
+});
 //
 //Parse.Cloud.define("changeUserNameAndUserRelation1",function(request,response){
 //    var userId=request.params.userId;

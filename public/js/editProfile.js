@@ -5,7 +5,7 @@ var selectedProfile, uid, count = 0, order = 0;
 var picFile;
 var currentPageNo;
 
-Parse.initialize("XQA3RRfnMim2IyheuTBRkKZNRurkTNhxEiqa8Bs8", "VLxlMCuZd4VMyoSXjoLm621gk9RFURUyj93K8ULm");
+Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
 
 function jsfunction(operation) {
     profileCount(order);
@@ -115,7 +115,6 @@ function getAllProfiles(pageNo, order) {
             document.getElementById("profileTable").innerHTML = html;
         },
         error: function (error) {
-
         }
     });
 }
@@ -167,6 +166,9 @@ function editProfile(profile) {
             document.getElementById("comp").value = selectedProfile.get("placeOfWork");
             //document.getElementById("comp").value = selectedProfile.get("placeOfWork");
             if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
+                document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
+            }
+            if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
                 document.getElementById("blah").src = selectedProfile.get("profilePic")._url;
                 var yourImg = document.getElementById('blah');
                 if(yourImg && yourImg.style) {
@@ -182,7 +184,44 @@ function editProfile(profile) {
     );
 
 }
-
+var imageObjcets,imageObjectsLen=0;
+function  seeImages()
+{
+    console.log("selcted Profile is "+selectedProfile.id);
+    if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
+        document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
+    }
+    Parse.Cloud.run("getImages",{profileId:selectedProfile.id},{
+        success: function (result) {
+            alert("successful :images");
+            imageObjcets=result;
+            imageObjectsLen=result.length();
+            //get all the objects having profileId equal to selectedprofile
+        },
+        error:function(error){
+            alert("Getting images not working");
+        }
+    });
+}
+function getImages(prevOrNext)
+{
+    var ino=imageNumber;
+    var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
+    if(prevOrNext==1)
+    {
+        if(ino==imageObjectsLen)getImages(0);
+        if(imageObjcets[ino+1].get("file")!=undefined && imageObjcets[ino+1].get("file")!=null && imageObjcets[ino+1].get("file")!="undefined") {
+            document.getElementById("previewMyImage").src = imageObjcets[ino+1].get("file")._url;
+        }
+    }
+    else
+    {
+        if(ino==1)getImages(1);
+        if(imageObjcets[ino-1].get("file")!=undefined && imageObjcets[ino-1].get("file")!=null && imageObjcets[ino-1].get("file")!="undefined") {
+            document.getElementById("previewMyImage").src = imageObjcets[ino-1].get("file")._url;
+        }
+    }
+}
 var doweUpdateAnything = false;
 function saveProfile() {
     doweUpdateAnything = true;

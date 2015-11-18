@@ -285,6 +285,7 @@
                         <!--<script src="js/component.js"></script>-->
                         <!--<input class="btn btn-primary" type="button" value="SaveProfile" onclick="saveProfile()"/>-->
                         <button type="button" class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#seeImages" onclick="seeImages()">See More Images</button>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -342,7 +343,29 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="seeImages" role="dialog">
+        <div class="modal-dialog modal-sm">
 
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" id="imageBody">
+                    <!--<img width="270" src="http://files.parsetfss.com/bf1cef06-c333-4108-a908-b6a35d80542a/tfss-e8a06922-6103-4b47-95d8-23817c60a8a6-cropped.jpg" />-->
+                    <img id="previewMyImage" width="270" src="#" />
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" class="form-control" id="imageNumber" value="1">
+                    <button type="button" class="btn btn-default" onclick="getImages(0)">Prev</button>
+                    <button type="button" class="btn btn-default" onclick="getImages(1)">Next</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </body>
 <script src='https://www.parsecdn.com/js/parse-1.2.18.min.js'></script>
 <script src="js/non-empty.js"></script>
@@ -367,11 +390,10 @@
                     df.appendChild(option);
                 }
                 elm.appendChild(df);
-                console.log("select box is working")
+                console.log("select box is working");
             },
             error: function (error) {
                 console.log("select box for agent is not working");
-
             }
         });
     }());
