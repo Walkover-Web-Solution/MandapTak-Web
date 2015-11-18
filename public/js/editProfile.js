@@ -210,7 +210,7 @@ function getImages(prevOrNext)
     if(prevOrNext==1 && imageObjectsLen!=1)
     {
         if(ino==imageObjectsLen-1){
-            document.getElementById("myBtn1").disabled = true;
+            document.getElementById("myBtn2").disabled = true;
         }
         if(ino<imageObjectsLen && imageObjcets[ino].get("file")!=undefined && imageObjcets[ino].get("file")!=null && imageObjcets[ino].get("file")!="undefined") {
             document.getElementById("previewMyImage").src = imageObjcets[ino].get("file")._url;
@@ -220,7 +220,7 @@ function getImages(prevOrNext)
     else if(prevOrNext==0 && imageObjectsLen!=1)
     {
         if(ino==1){
-            document.getElementById("myBtn2").disabled = true;
+            document.getElementById("myBtn1").disabled = true;
         }
         if(ino>1 && imageObjcets[ino-1].get("file")!=undefined && imageObjcets[ino-1].get("file")!=null && imageObjcets[ino-1].get("file")!="undefined") {
             document.getElementById("previewMyImage").src = imageObjcets[ino-1].get("file")._url;
