@@ -491,16 +491,22 @@ Parse.Cloud.define("deleteDuplicateInstallations", function (request, response) 
 });
 Parse.Cloud.define("reportUser", function (request, response) {
     Parse.Cloud.useMasterKey();
-    console.log("here params");
+    console.log("console 1");
     console.log(request.params);
     var reportedProfile = request.params.reportedProfile;
     var profileId = request.params.profileId;
     var reason = request.params.reason;
+    console.log("console 2");
     var ReportProfile = Parse.Object.extend("ReportAbuse");
+    console.log("console 3");
     var reportQuery = new ReportProfile();
+    console.log("console 4");
     reportQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
+    console.log("console 5");
     reportQuery.set("reportedProfile", {"__type": "Pointer", "className": "Profile", "objectId": reportedProfile});
+    console.log("console 6");
     reportQuery.set("reason", reason);
+    console.log("console 7");
     reportQuery.save(null, {
         success: function (reportResult) {
             var DisLikeProfile = Parse.Object.extend("DislikeProfile");
