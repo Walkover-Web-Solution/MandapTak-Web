@@ -40,23 +40,35 @@ Parse.Cloud.define("likeAndFind", function (request, response) {
     var foundMatch = "";
     var LikedProfile = Parse.Object.extend("LikedProfile");
     var likeQuery = new LikedProfile();
-    likeQuery.set("profileId", { "__type": "Pointer", "className": "Profile", "objectId": userProfileid });
-    likeQuery.set("likeProfileId", { "__type": "Pointer", "className": "Profile", "objectId": likeProfileid });
+    likeQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": userProfileid});
+    likeQuery.set("likeProfileId", {"__type": "Pointer", "className": "Profile", "objectId": likeProfileid});
     //likeQuery.setACL(new Parse.ACL(request.user));
     likeQuery.save(null, {
         success: function (likeResult) {
             console.log("successfully saved entry to db.");
             console.log("now searching for matching or not.");
             var findMatch = new Parse.Query("LikedProfile");
-            findMatch.equalTo("profileId", { "__type": "Pointer", "className": "Profile", "objectId": likeProfileid });
-            findMatch.equalTo("likeProfileId", { "__type": "Pointer", "className": "Profile", "objectId": userProfileid });
+            findMatch.equalTo("profileId", {"__type": "Pointer", "className": "Profile", "objectId": likeProfileid});
+            findMatch.equalTo("likeProfileId", {
+                "__type": "Pointer",
+                "className": "Profile",
+                "objectId": userProfileid
+            });
             findMatch.first({
                 success: function (matchResult) {
                     if (matchResult === undefined) {
                         console.log("Successfully saved entry.");
                         var pinnedProfiles = new Parse.Query("PinnedProfile");
-                        pinnedProfiles.equalTo("profileId", { "__type": "Pointer", "className": "Profile", "objectId": userProfileid });
-                        pinnedProfiles.equalTo("pinnedProfileId", { "__type": "Pointer", "className": "Profile", "objectId": likeProfileid });
+                        pinnedProfiles.equalTo("profileId", {
+                            "__type": "Pointer",
+                            "className": "Profile",
+                            "objectId": userProfileid
+                        });
+                        pinnedProfiles.equalTo("pinnedProfileId", {
+                            "__type": "Pointer",
+                            "className": "Profile",
+                            "objectId": likeProfileid
+                        });
                         pinnedProfiles.find().then(function (pinnProfiles) {
                             console.log("We found pinned profile : " + pinnProfiles.length);
                             Parse.Object.destroyAll(pinnProfiles).then(function (success) {
@@ -73,14 +85,22 @@ Parse.Cloud.define("likeAndFind", function (request, response) {
                         matchFound = likeResult;
                         console.log("both liked each other.");
                         var userProfileQuery = new Parse.Query("UserProfile");
-                        userProfileQuery.equalTo("profileId", { "__type": "Pointer", "className": "Profile", "objectId": likeProfileid });
+                        userProfileQuery.equalTo("profileId", {
+                            "__type": "Pointer",
+                            "className": "Profile",
+                            "objectId": likeProfileid
+                        });
                         userProfileQuery.notEqualTo("relation", "Agent");
                         userProfileQuery.include("userId");
                         userProfileQuery.each(function (userProfile) {
                             console.log("user profiles we get here for : " + likeProfileid + " are :");
                             console.log(userProfile.get('userId'));
                             var pushQuery = new Parse.Query(Parse.Installation);
-                            pushQuery.equalTo("user", { "__type": "Pointer", "className": "_User", "objectId": userProfile.get('userId').id });
+                            pushQuery.equalTo("user", {
+                                "__type": "Pointer",
+                                "className": "_User",
+                                "objectId": userProfile.get('userId').id
+                            });
 
                             // Send push notification to query
                             Parse.Push.send({
@@ -103,8 +123,16 @@ Parse.Cloud.define("likeAndFind", function (request, response) {
                         }).then(function () {
                             console.log("push has been sent successfully to ");
                             var pinnedProfiles = new Parse.Query("PinnedProfile");
-                            pinnedProfiles.equalTo("profileId", { "__type": "Pointer", "className": "Profile", "objectId": userProfileid });
-                            pinnedProfiles.equalTo("pinnedProfileId", { "__type": "Pointer", "className": "Profile", "objectId": likeProfileid });
+                            pinnedProfiles.equalTo("profileId", {
+                                "__type": "Pointer",
+                                "className": "Profile",
+                                "objectId": userProfileid
+                            });
+                            pinnedProfiles.equalTo("pinnedProfileId", {
+                                "__type": "Pointer",
+                                "className": "Profile",
+                                "objectId": likeProfileid
+                            });
                             pinnedProfiles.find().then(function (pinnProfiles) {
                                 console.log("We found pinned profile : " + pinnProfiles.length);
                                 Parse.Object.destroyAll(pinnProfiles).then(function (success) {
@@ -152,7 +180,7 @@ Parse.Cloud.define("givePermissiontoNewUser", function (request, response) {
                 else {
                     var GameScore = Parse.Object.extend("UserProfile");
                     var gameScore = new GameScore();
-                    gameScore.set("profileId", { "__type": "Pointer", "className": "Profile", "objectId": profileId });
+                    gameScore.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
                     gameScore.set("userId", user[0]);
                     gameScore.set("relation", relationWprofile);
                     gameScore.set("isPrimary", false);
@@ -161,7 +189,11 @@ Parse.Cloud.define("givePermissiontoNewUser", function (request, response) {
                             console.log("User already exists so we are giving permission for profile.")
                             console.log("Now we are deducting balance from caller.")
                             var query = new Parse.Query("UserCredits");
-                            query.equalTo("userId", { "__type": "Pointer", "className": "_User", "objectId": request.user.id });
+                            query.equalTo("userId", {
+                                "__type": "Pointer",
+                                "className": "_User",
+                                "objectId": request.user.id
+                            });
                             query.first({
                                 success: function (sResult) {
                                     if (sResult.get('credits') < 10) {
@@ -194,7 +226,12 @@ Parse.Cloud.define("givePermissiontoNewUser", function (request, response) {
                                                 console.log("Credit deducted successfully.");
                                                 response.success("Permission given successfully.");
                                                 //we have to write a code here to make an entry in transaction table to keep record.
-                                                Parse.Cloud.run("transactionEntry", { from: request.user.id, to: user[0].id, amount: deductCredit, purpose: "permission" }, {
+                                                Parse.Cloud.run("transactionEntry", {
+                                                    from: request.user.id,
+                                                    to: user[0].id,
+                                                    amount: deductCredit,
+                                                    purpose: "permission"
+                                                }, {
                                                     success: function (result) {
                                                         console.log("do transaction transactionEntry result : " + result);
                                                         response.success(result);
@@ -236,12 +273,12 @@ Parse.Cloud.define("givePermissiontoNewUser", function (request, response) {
                 user.set("phoneNo", parseInt(mobileNo));
                 user.set("password", mobileNo);
                 user.set("isActive", true);
-                user.set("roleId", { "__type": "Pointer", "className": "Role", "objectId": "ZURrJTBWwl" });
+                user.set("roleId", {"__type": "Pointer", "className": "Role", "objectId": "ZURrJTBWwl"});
                 user.signUp(null, {
                     success: function (user) {
                         var UserProfile = Parse.Object.extend("UserProfile");
                         var uProfile = new UserProfile();
-                        uProfile.set("profileId", { "__type": "Pointer", "className": "Profile", "objectId": profileId });
+                        uProfile.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
                         uProfile.set("userId", user);
                         uProfile.set("relation", relationWprofile);
                         uProfile.set("isPrimary", false);
@@ -250,7 +287,11 @@ Parse.Cloud.define("givePermissiontoNewUser", function (request, response) {
                                 console.log("User already exists so we are giving permission for profile.")
                                 console.log("Now we are deducting balance from caller.")
                                 var query = new Parse.Query("UserCredits");
-                                query.equalTo("userId", { "__type": "Pointer", "className": "_User", "objectId": request.user.id });
+                                query.equalTo("userId", {
+                                    "__type": "Pointer",
+                                    "className": "_User",
+                                    "objectId": request.user.id
+                                });
                                 query.first({
                                     success: function (sResult) {
                                         if (sResult.get('credits') < 10) {
@@ -291,7 +332,12 @@ Parse.Cloud.define("givePermissiontoNewUser", function (request, response) {
                                             sResult.save(null, {
                                                 success: function (dResult) {
                                                     console.log("Credit deducted successfully.");
-                                                    Parse.Cloud.run("transactionEntry", { from: request.user.id, to: user.id, amount: deductCredit, purpose: "permission" }, {
+                                                    Parse.Cloud.run("transactionEntry", {
+                                                        from: request.user.id,
+                                                        to: user.id,
+                                                        amount: deductCredit,
+                                                        purpose: "permission"
+                                                    }, {
                                                         success: function (result) {
                                                             console.log("do transaction transactionEntry result : " + result);
                                                             //response.success(result);
@@ -301,7 +347,7 @@ Parse.Cloud.define("givePermissiontoNewUser", function (request, response) {
                                                             console.log("error in transaction entry. : " + error);
                                                             response.error(error);
                                                         }
-                                                    });                                                    
+                                                    });
                                                 },
                                                 error: function (error) {
                                                     console.log("Unable to deduct credit.");
@@ -406,7 +452,7 @@ Parse.Cloud.define("deleteDuplicateInstallations", function (request, response) 
     var userId = request.params.userid;
     var query = new Parse.Query(Parse.Installation);
     query.descending("createdAt");
-    query.equalTo("user", { "__type": "Pointer", "className": "_User", "objectId": userId })
+    query.equalTo("user", {"__type": "Pointer", "className": "_User", "objectId": userId})
     query.include("user");
     query.find({
         success: function (installations) {
@@ -446,25 +492,26 @@ Parse.Cloud.define("deleteDuplicateInstallations", function (request, response) 
 Parse.Cloud.define("reportUser", function (request, response) {
     console.log("before master");
     Parse.Cloud.useMasterKey();
-    console.log("here");
+    console.log("here params");
+    console.log(request.params);
     var reportedProfile = request.params.reportedProfile;
     var profileId = request.params.profileId;
     var reason = request.params.reason;
-    var ReportProfile = new Parse.Object.extend("ReportAbuse");
+    var ReportProfile = Parse.Object.extend("ReportAbuse");
     var reportQuery = new ReportProfile();
     reportQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
     reportQuery.set("reportedProfile", {"__type": "Pointer", "className": "Profile", "objectId": reportedProfile});
     reportQuery.set("reason", reason);
     reportQuery.save(null, {
         success: function (likeResult) {
-            var DisLikeProfile =new Parse.Object.extend("DislikeProfile");
+            var DisLikeProfile =  Parse.Object.extend("DislikeProfile");
             var dislikeQuery = new DisLikeProfile();
             reportQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
             reportQuery.set("dislikeProfileId", {"__type": "Pointer", "className": "Profile", "objectId": reportedId});
             dislikeQuery.save(null, {
                 success: function (likeResult) {
                     var Mandrill = require('cloud/mandrillTemplateSend.js');
-                    console.log("hre in save");
+                    console.log("here in save");
                     Mandrill.initialize('UVSN4grTxE94d1j3mZGCxQ');
                     Mandrill.sendTemplate({
                         template_name: request.params.templateName,
@@ -497,7 +544,7 @@ Parse.Cloud.define("reportUser", function (request, response) {
             });
         },
         error: function (error) {
-            console.log("last one"+error.message+" "+error.code);
+            console.log("last one" + error.message + " " + error.code);
             response.error(error);
         }
     });
