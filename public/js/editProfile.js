@@ -209,23 +209,20 @@ function getImages(prevOrNext)
     var ino=imageNumber;
     if(prevOrNext==1 && imageObjectsLen!=1)
     {
-        if(ino==imageObjectsLen){
-            document.getElementById("imageNumber").value="1";
-            getImages(0);
-
+        if(ino==imageObjectsLen-1){
+            document.getElementById("myBtn").disabled = true;
         }
-        if(imageObjcets[ino+1].get("file")!=undefined && imageObjcets[ino+1].get("file")!=null && imageObjcets[ino+1].get("file")!="undefined") {
-            document.getElementById("previewMyImage").src = imageObjcets[ino+1].get("file")._url;
+        if(ino<imageObjectsLen && imageObjcets[ino].get("file")!=undefined && imageObjcets[ino].get("file")!=null && imageObjcets[ino].get("file")!="undefined") {
+            document.getElementById("previewMyImage").src = imageObjcets[ino].get("file")._url;
             document.getElementById("imageNumber").value=ino+1;
         }
     }
     else if(prevOrNext==0 && imageObjectsLen!=1)
     {
         if(ino==1){
-            document.getElementById("imageNumber").value=(imageObjectsLen-1);
-            getImages(1);
+            document.getElementById("myBtn").disabled = true;
         }
-        if(imageObjcets[ino-1].get("file")!=undefined && imageObjcets[ino-1].get("file")!=null && imageObjcets[ino-1].get("file")!="undefined") {
+        if(ino>1 && imageObjcets[ino-1].get("file")!=undefined && imageObjcets[ino-1].get("file")!=null && imageObjcets[ino-1].get("file")!="undefined") {
             document.getElementById("previewMyImage").src = imageObjcets[ino-1].get("file")._url;
             document.getElementById("imageNumber").value=ino-1;
         }
