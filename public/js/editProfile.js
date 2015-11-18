@@ -187,6 +187,7 @@ function editProfile(profile) {
 var imageObjcets,imageObjectsLen=0;
 function  seeImages()
 {
+    document.getElementById("imageNumber").value=1;
     console.log("selcted Profile is "+selectedProfile.id);
     if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
         document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
@@ -207,9 +208,15 @@ function getImages(prevOrNext)
     var ino=imageNumber;
     if(ino==imageObjectsLen-1){
         document.getElementById("myBtn2").disabled = true;
+        document.getElementById("myBtn1").disabled = false;
     }
-    if(ino==1){
+    else if(ino==1){
         document.getElementById("myBtn1").disabled = true;
+        document.getElementById("myBtn2").disabled = false;
+    }
+    else {
+        document.getElementById("myBtn1").disabled = false;
+        document.getElementById("myBtn2").disabled = false;
     }
     if(prevOrNext==1 && imageObjectsLen!=1)
     {
