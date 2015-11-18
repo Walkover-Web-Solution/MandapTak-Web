@@ -193,13 +193,11 @@ function  seeImages()
     }
     Parse.Cloud.run("getImages",{profileId:selectedProfile.id},{
         success: function (result) {
-            alert("successful :images"+result.length);
             imageObjcets=result;
             imageObjectsLen=result.length;
             //get all the objects having profileId equal to selectedprofile
         },
         error:function(error){
-            alert("Getting images not working");
         }
     });
 }
