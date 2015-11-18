@@ -522,10 +522,6 @@ Parse.Cloud.define("reportUser", function (request, response) {
                             from_name: "Rakshit",
                             to: [
                                 {
-                                    email: "rakshit@walkover.in",
-                                    name: "Rakshit"
-                                },
-                                {
                                     email: "shubhendra@walkover.in",
                                     name: "Shubhendra"
                                 }
