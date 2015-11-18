@@ -508,53 +508,67 @@ Parse.Cloud.define("reportUser", function (request, response) {
     reportQuery.set("reason", reason);
     console.log("console 7");
     reportQuery.save(null, {
-        success: function (reportResult) {
-            var DisLikeProfile = Parse.Object.extend("DislikeProfile");
-            var dislikeQuery = new DisLikeProfile();
-            dislikeQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
-            dislikeQuery.set("dislikeProfileId", {
-                "__type": "Pointer",
-                "className": "Profile",
-                "objectId": reportedProfile
-            });
-            dislikeQuery.save(null, {
-                success: function (likeResult) {
-                    var Mandrill = require('cloud/mandrillTemplateSend.js');
-                    console.log("here in save");
-                    Mandrill.initialize('UVSN4grTxE94d1j3mZGCxQ');
-                    Mandrill.sendTemplate({
-                        template_name: request.params.templateName,
-                        template_content: [{
-                            name: "example name",
-                            content: "example content" //Those are required but they are ignored
-                        }],
-                        message: {
-                            to: [{
-                                email: "rakshit@walkover.in",
-                                name: "Rakshit"
-                            }],
-                            important: true
-                        },
-                        async: false
-                    }, {
-                        success: function (httpResponse) {
-                            console.log(httpResponse);
-                            response.success("Email sent!");
-                        },
-                        error: function (httpResponse) {
-                            console.error(httpResponse);
-                            response.error("Uh oh, something went wrong");
-                        }
-                    });
-                },
-                error: function (error) {
-                    response.error(error);
-                }
-            });
+        success: function(gameScore) {
+            // Execute any logic that should take place after the object is saved.
+            console.log('New object created with objectId: ' + gameScore.id);
         },
-        error: function (error) {
-            console.log("last one" + error.message + " " + error.code);
-            response.error(error);
+        error: function(gameScore, error) {
+            // Execute any logic that should take place if the save fails.
+            // error is a Parse.Error with an error code and message.
+            console.log('Failed to create new object, with error code: ' + error.message);
         }
     });
+
+    //reportQuery.save(null, {
+    //    success: function (reportResult) {
+    //        console.log("console 8");
+    //        var DisLikeProfile = Parse.Object.extend("DislikeProfile");
+    //        var dislikeQuery = new DisLikeProfile();
+    //        dislikeQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
+    //        dislikeQuery.set("dislikeProfileId", {
+    //            "__type": "Pointer",
+    //            "className": "Profile",
+    //            "objectId": reportedProfile
+    //        });
+    //
+    //        dislikeQuery.save(null, {
+    //            success: function (likeResult) {
+    //                var Mandrill = require('cloud/mandrillTemplateSend.js');
+    //                console.log("here in save");
+    //                Mandrill.initialize('UVSN4grTxE94d1j3mZGCxQ');
+    //                Mandrill.sendTemplate({
+    //                    template_name: request.params.templateName,
+    //                    template_content: [{
+    //                        name: "example name",
+    //                        content: "example content" //Those are required but they are ignored
+    //                    }],
+    //                    message: {
+    //                        to: [{
+    //                            email: "rakshit@walkover.in",
+    //                            name: "Rakshit"
+    //                        }],
+    //                        important: true
+    //                    },
+    //                    async: false
+    //                }, {
+    //                    success: function (httpResponse) {
+    //                        console.log(httpResponse);
+    //                        response.success("Email sent!");
+    //                    },
+    //                    error: function (httpResponse) {
+    //                        console.error(httpResponse);
+    //                        response.error("Uh oh, something went wrong");
+    //                    }
+    //                });
+    //            },
+    //            error: function (error) {
+    //                response.error(error);
+    //            }
+    //        });
+    //    },
+    //    error: function (error) {
+    //        console.log("last one" + error.message + " " + error.code);
+    //        response.error(error);
+    //    }
+    //});
 });
