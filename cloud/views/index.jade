@@ -220,6 +220,7 @@ html(lang='en')
               // <script src="js/component.js"></script>
               // <input class="btn btn-primary" type="button" value="SaveProfile" onclick="saveProfile()"/>
               button.btn.btn-primary(type='button', onclick='saveProfile()') Save Profile
+              button.btn.btn-primary(type='button', data-toggle='modal', data-target='#seeImages', onclick='seeImages()') See More Images
           .modal-footer
             button.btn.btn-default(type='button', data-dismiss='modal') Close
     #imgModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='Login', aria-hidden='true')
@@ -253,6 +254,21 @@ html(lang='en')
         // /.modal-content
       // /.modal-dialog
     // /.modal
+    // Modal
+    #seeImages.modal.fade(role='dialog')
+      .modal-dialog.modal-sm
+        // Modal content
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal') ×
+          #imageBody.modal-body
+            // <img width="270" src="http://files.parsetfss.com/bf1cef06-c333-4108-a908-b6a35d80542a/tfss-e8a06922-6103-4b47-95d8-23817c60a8a6-cropped.jpg" />
+            img#previewMyImage(width='270', src='#')
+          .modal-footer
+            input#imageNumber.form-control(type='hidden', value='1')
+            button.btn.btn-default(type='button', onclick='getImages(0)') Prev
+            button.btn.btn-default(type='button', onclick='getImages(1)') Next
+            button.btn.btn-default(type='button', data-dismiss='modal') Close
   script(src='https://www.parsecdn.com/js/parse-1.2.18.min.js')
   script(src='js/non-empty.js')
   script(src='js/editProfile.js')
@@ -276,7 +292,7 @@ html(lang='en')
             df.appendChild(option);
           }
           elm.appendChild(df);
-          console.log("select box is working")
+          console.log("select box is working");
         },
         error: function (error) {
           console.log("select box for agent is not working");
