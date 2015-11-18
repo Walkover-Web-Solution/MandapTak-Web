@@ -444,26 +444,27 @@ Parse.Cloud.define("deleteDuplicateInstallations", function (request, response) 
     });
 });
 Parse.Cloud.define("reportUser", function (request, response) {
+    console.log("before master");
     Parse.Cloud.useMasterKey();
+    console.log("here");
     var reportedProfile = request.params.reportedProfile;
     var profileId = request.params.profileId;
     var reason = request.params.reason;
-    var ReportProfile = Parse.Object.extend("ReportAbuse");
+    var ReportProfile = new Parse.Object.extend("ReportAbuse");
     var reportQuery = new ReportProfile();
     reportQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
     reportQuery.set("reportedProfile", {"__type": "Pointer", "className": "Profile", "objectId": reportedProfile});
     reportQuery.set("reason", reason);
     reportQuery.save(null, {
         success: function (likeResult) {
-            var DisLikeProfile = Parse.Object.extend("DislikeProfile");
+            var DisLikeProfile =new Parse.Object.extend("DislikeProfile");
             var dislikeQuery = new DisLikeProfile();
             reportQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
             reportQuery.set("dislikeProfileId", {"__type": "Pointer", "className": "Profile", "objectId": reportedId});
             dislikeQuery.save(null, {
                 success: function (likeResult) {
-                    response.success(likeResult);
                     var Mandrill = require('cloud/mandrillTemplateSend.js');
-
+                    console.log("hre in save");
                     Mandrill.initialize('UVSN4grTxE94d1j3mZGCxQ');
                     Mandrill.sendTemplate({
                         template_name: request.params.templateName,
@@ -496,6 +497,7 @@ Parse.Cloud.define("reportUser", function (request, response) {
             });
         },
         error: function (error) {
+            console.log("last one"+error.message+" "+error.code);
             response.error(error);
         }
     });

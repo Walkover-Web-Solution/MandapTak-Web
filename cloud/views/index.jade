@@ -176,7 +176,7 @@ html(lang='en')
                     input#spe.form-control(type='text', placeholder='Enter Specialization')
                   .form-group
                     label Preview Image:
-                    img#blah.images(src='http://files.parsetfss.com/bf1cef06-c333-4108-a908-b6a35d80542a/tfss-71981ac8-eed2-43a5-b265-fd6f403c75c0-profile.jpg', alt='your image')
+                    img#blah.images(src='#', alt='your image', height='248', width='248')
                   // <div class="form-group ui-widget">
                   // <label>User Name:</label>
                   // <input type="text" class="form-control" id="username" placeholder="Enter User name">
@@ -199,6 +199,8 @@ html(lang='en')
                 input#indusobj.form-control(type='hidden')
               .form-group
                 input#requiredUserId.form-control(type='hidden')
+              .form-group
+                input#imagePreview.form-control(type='hidden')
               // Hidden Fields
               // <div class="form-group hidden">
               script.
