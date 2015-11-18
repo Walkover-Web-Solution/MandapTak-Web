@@ -205,8 +205,8 @@ function  seeImages()
 }
 function getImages(prevOrNext)
 {
-    var ino=imageNumber;
     var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
+    var ino=imageNumber;
     if(prevOrNext==1)
     {
         if(ino==imageObjectsLen)getImages(0);
