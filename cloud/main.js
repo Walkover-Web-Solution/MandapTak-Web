@@ -490,7 +490,6 @@ Parse.Cloud.define("deleteDuplicateInstallations", function (request, response) 
     });
 });
 Parse.Cloud.define("reportUser", function (request, response) {
-    console.log("before master");
     Parse.Cloud.useMasterKey();
     console.log("here params");
     console.log(request.params);
@@ -499,12 +498,12 @@ Parse.Cloud.define("reportUser", function (request, response) {
     var reason = request.params.reason;
     var ReportProfile = Parse.Object.extend("ReportAbuse");
     var reportQuery = new ReportProfile();
-    reportQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
-    reportQuery.set("reportedProfile", {"__type": "Pointer", "className": "Profile", "objectId": reportedProfile});
+    reportQuery.set("profileId", profileId);
+    reportQuery.set("reportedProfile", reportedProfile);
     reportQuery.set("reason", reason);
     reportQuery.save(null, {
         success: function (likeResult) {
-            var DisLikeProfile =  Parse.Object.extend("DislikeProfile");
+            var DisLikeProfile = Parse.Object.extend("DislikeProfile");
             var dislikeQuery = new DisLikeProfile();
             reportQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
             reportQuery.set("dislikeProfileId", {"__type": "Pointer", "className": "Profile", "objectId": reportedId});
