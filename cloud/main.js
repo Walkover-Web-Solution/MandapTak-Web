@@ -500,13 +500,17 @@ Parse.Cloud.define("reportUser", function (request, response) {
     var reportQuery = new ReportProfile();
     reportQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
     reportQuery.set("reportedProfile", {"__type": "Pointer", "className": "Profile", "objectId": reportedProfile});
-    //reportQuery.set("reason", );
+    reportQuery.set("reason", reason);
     reportQuery.save(null, {
-        success: function (likeResult) {
+        success: function (reportResult) {
             var DisLikeProfile = Parse.Object.extend("DislikeProfile");
             var dislikeQuery = new DisLikeProfile();
             reportQuery.set("profileId", {"__type": "Pointer", "className": "Profile", "objectId": profileId});
-            reportQuery.set("dislikeProfileId", {"__type": "Pointer", "className": "Profile", "objectId": reportedId});
+            reportQuery.set("dislikeProfileId", {
+                "__type": "Pointer",
+                "className": "Profile",
+                "objectId": reportedProfile
+            });
             dislikeQuery.save(null, {
                 success: function (likeResult) {
                     var Mandrill = require('cloud/mandrillTemplateSend.js');
