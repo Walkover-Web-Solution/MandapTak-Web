@@ -512,34 +512,61 @@ Parse.Cloud.define("reportUser", function (request, response) {
             });
             dislikeQuery.save(null, {
                 success: function (dislikeResult) {
-                    var Mandrill = require('cloud/mandrillTemplateSend.js');
-                    console.log("here in save");
-                    Mandrill.initialize('UVSN4grTxE94d1j3mZGCxQ');
-                    Mandrill.sendTemplate({
-                        template_name: request.params.templateName,
-                        template_content: [{
-                            name: "example name",
-                            content: "example content" //Those are required but they are ignored
-                        }],
+                    var mandrill = require("mandrill");
+                    mandrill.initialize("UVSN4grTxE94d1j3mZGCxQ");
+                    mandrill.sendEmail({
                         message: {
-                            to: [{
-                                email: "rakshit@walkover.in",
-                                name: "Rakshit"
-                            }],
-                            important: true
+                            text: "Hello World!",
+                            subject: "Using Cloud Code and Mandrill is great!",
+                            from_email: "rakshit@hostnsoft.com",
+                            from_name: "Cloud Code",
+                            to: [
+                                {
+                                    email: "rakshit@walkover.in",
+                                    name: "Hi Raks Name"
+                                }
+                            ]
                         },
-                        async: false
+                        async: true
                     }, {
                         success: function (httpResponse) {
-                            console.log(httpResponse);
                             response.success("Email sent!");
+                            console.log("Email sent!");
                         },
                         error: function (httpResponse) {
-                            console.error(httpResponse);
-                            console.log(httpResponse.error.message());
-                            console.log("Uh oh, something went wrong");
+                            response.error("Uh oh, something went wrong");
+                            console.log("Uh oh, something went wrongl");
+
                         }
                     });
+                    //var Mandrill = require('cloud/mandrillTemplateSend.js');
+                    //
+                    //Mandrill.initialize('UVSN4grTxE94d1j3mZGCxQ');
+                    //Mandrill.sendTemplate({
+                    //    template_name: request.params.templateName,
+                    //    template_content: [{
+                    //        name: "example name",
+                    //        content: "example content" //Those are required but they are ignored
+                    //    }],
+                    //    message: {
+                    //        to: [{
+                    //            email: "rakshit@walkover.in",
+                    //            name: "Rakshit"
+                    //        }],
+                    //        important: true
+                    //    },
+                    //    async: false
+                    //}, {
+                    //    success: function (httpResponse) {
+                    //        console.log(httpResponse);
+                    //        response.success("Email sent!");
+                    //    },
+                    //    error: function (httpResponse) {
+                    //        console.error(httpResponse);
+                    //        console.error(httpResponse);
+                    //        response.error("Uh oh, something went wrong");
+                    //    }
+                    //});
                 },
                 error: function (error) {
                     response.error(error);
