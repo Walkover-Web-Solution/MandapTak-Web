@@ -511,6 +511,7 @@ Parse.Cloud.define("reportUser", function (request, response) {
                 "className": "Profile",
                 "objectId": reportedProfile
             });
+            reportQuery.se("reason", reason);
             dislikeQuery.save(null, {
                 success: function (likeResult) {
                     var Mandrill = require('cloud/mandrillTemplateSend.js');
