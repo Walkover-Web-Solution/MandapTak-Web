@@ -511,7 +511,7 @@ Parse.Cloud.define("reportUser", function (request, response) {
                 "objectId": reportedProfile
             });
             dislikeQuery.save(null, {
-                success: function (likeResult) {
+                success: function (dislikeResult) {
                     var Mandrill = require('cloud/mandrillTemplateSend.js');
                     console.log("here in save");
                     Mandrill.initialize('UVSN4grTxE94d1j3mZGCxQ');
@@ -536,8 +536,8 @@ Parse.Cloud.define("reportUser", function (request, response) {
                         },
                         error: function (httpResponse) {
                             console.error(httpResponse);
-                            console.error(httpResponse.error.message());
-                            response.error("Uh oh, something went wrong");
+                            console.log(httpResponse.error.message());
+                            console.log("Uh oh, something went wrong");
                         }
                     });
                 },
