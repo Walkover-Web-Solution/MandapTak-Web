@@ -204,9 +204,10 @@ function  seeImages()
             //get all the objects having profileId equal to selectedprofile
             for(var i=0;i<result.length;i++)
             {
-                html+="<li><img src='";
-                html+=result[i].get("file")._url+"'";
-                html+=" style='width:270px;height:270px;'></li>";
+                //html+="<li><img src='";
+                //html+=result[i].get("file")._url+"'";
+                //html+=" style='width:270px;height:270px;'></li>";
+                html+="<li><img src='https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRgDKJeeHPHtfNrm4Z9ghtI-8l6Bpdb-Vf0vcyk4cM9ZWSWWJsXYxmOQ3Q' style='width:270px; height:270px;'></li>";
             }//
             document.getElementById("ull").innerHTML=html;
         },
