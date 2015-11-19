@@ -165,9 +165,9 @@ function editProfile(profile) {
             document.getElementById("income").value = selectedProfile.get("package");
             document.getElementById("comp").value = selectedProfile.get("placeOfWork");
             //document.getElementById("comp").value = selectedProfile.get("placeOfWork");
-            if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
-                document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
-            }
+            //if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
+            //    document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
+            //}
             if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
                 document.getElementById("blah").src = selectedProfile.get("profilePic")._url;
                 var yourImg = document.getElementById('blah');
@@ -202,7 +202,7 @@ function  seeImages()
             imageObjcets=result;
             imageObjectsLen=result.length;
             //get all the objects having profileId equal to selectedprofile
-            for(var i=0;i<result.length;i++)
+            for(var i=0;i<1;i++)
             {
                 html+="<li><img src='";
                 html+=result[i].get("file")._url+"'";
@@ -214,8 +214,7 @@ function  seeImages()
         }
     });
 }
-function getImages(prevOrNext)
-{
+function getImages(prevOrNext){
     var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
     var ino=imageNumber;
     if(ino==imageObjectsLen-1){
