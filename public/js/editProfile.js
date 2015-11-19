@@ -165,9 +165,9 @@ function editProfile(profile) {
             document.getElementById("income").value = selectedProfile.get("package");
             document.getElementById("comp").value = selectedProfile.get("placeOfWork");
             //document.getElementById("comp").value = selectedProfile.get("placeOfWork");
-            //if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
-            //    document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
-            //}
+            if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
+                document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
+            }
             if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
                 document.getElementById("blah").src = selectedProfile.get("profilePic")._url;
                 var yourImg = document.getElementById('blah');
@@ -189,33 +189,20 @@ function  seeImages()
 {
     //document.getElementById("imageNumber").value=1;
     console.log("selcted Profile is "+selectedProfile.id);
-    //if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
-    //    document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
-    //}
-
-    //for slider jcarouselLite
-    var html="";
-
-
+    if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
+        document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
+    }
     Parse.Cloud.run("getImages",{profileId:selectedProfile.id},{
         success: function (result) {
             imageObjcets=result;
             imageObjectsLen=result.length;
-            //get all the objects having profileId equal to selectedprofile
-            for(var i=0;i<result.length;i++)
-            {
-                //html+="<li><img src='";
-                //html+=result[i].get("file")._url+"'";
-                //html+=" style='width:270px;height:270px;'></li>";
-                html+="<li><img src='https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRgDKJeeHPHtfNrm4Z9ghtI-8l6Bpdb-Vf0vcyk4cM9ZWSWWJsXYxmOQ3Q' style='width:270px; height:270px;'></li>";
-            }//
-            document.getElementById("ull").innerHTML=html;
+
         },
         error:function(error){
         }
     });
 }
-/*function getImages(prevOrNext){
+function getImages(prevOrNext){
     var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
     var ino=imageNumber;
     if(ino==imageObjectsLen-1){
@@ -246,7 +233,7 @@ function  seeImages()
             document.getElementById("imageNumber").value=ino-1;
         }
     }
-}*/
+}
 var doweUpdateAnything = false;
 function saveProfile() {
     doweUpdateAnything = true;
