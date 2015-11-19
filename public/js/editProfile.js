@@ -189,9 +189,9 @@ function  seeImages()
 {
     //document.getElementById("imageNumber").value=1;
     console.log("selcted Profile is "+selectedProfile.id);
-    if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
-        document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
-    }
+    //if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
+    //    document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
+    //}
 
     //for slider jcarouselLite
     var html="";
