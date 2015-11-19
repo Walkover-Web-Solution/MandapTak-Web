@@ -202,7 +202,7 @@ function  seeImages()
             imageObjcets=result;
             imageObjectsLen=result.length;
             //get all the objects having profileId equal to selectedprofile
-            for(var i=0;i<1;i++)
+            for(var i=0;i<result.length;i++)
             {
                 html+="<li><img src='";
                 html+=result[i].get("file")._url+"'";
@@ -214,7 +214,7 @@ function  seeImages()
         }
     });
 }
-function getImages(prevOrNext){
+/*function getImages(prevOrNext){
     var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
     var ino=imageNumber;
     if(ino==imageObjectsLen-1){
@@ -245,7 +245,7 @@ function getImages(prevOrNext){
             document.getElementById("imageNumber").value=ino-1;
         }
     }
-}
+}*/
 var doweUpdateAnything = false;
 function saveProfile() {
     doweUpdateAnything = true;
