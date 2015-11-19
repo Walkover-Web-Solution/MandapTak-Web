@@ -13,6 +13,8 @@ html(lang='en')
     link(href='css/bootstrap.min.css', rel='stylesheet')
     script(src='js/bootstrap.min.js')
     script(src='js/jquery.cropit.js')
+    // jcarousel for image slider
+    script(type='text/javascript', src='js/jcarousel.js')
     // for image resize and crop
     link(rel='stylesheet', type='text/css', href='css/normalize.css')
     // <link rel="stylesheet" type="text/css" href="css/demo.css" />
@@ -264,11 +266,16 @@ html(lang='en')
           #imageBody.modal-body
             // <img width="270" src="http://files.parsetfss.com/bf1cef06-c333-4108-a908-b6a35d80542a/tfss-e8a06922-6103-4b47-95d8-23817c60a8a6-cropped.jpg" />
             img#previewMyImage(width='270', src='#')
-          .modal-footer
-            input#imageNumber.form-control(type='hidden', value='1')
-            button#myBtn1.btn.btn-default(type='button', onclick='getImages(0)') Prev
-            button#myBtn2.btn.btn-default(type='button', onclick='getImages(1)') Next
-            button.btn.btn-default(type='button', data-dismiss='modal') Close
+          // <div class="modal-footer">
+          // <input type="hidden" class="form-control" id="imageNumber" value="1">
+          // <button type="button" id="myBtn1" class="btn btn-default" onclick="getImages(0)">Prev</button>
+          // <button type="button" id="myBtn2" class="btn btn-default" onclick="getImages(1)">Next</button>
+          // <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          // </div>
+          button.prev-no-style «
+          button.next-no-style »
+          .carousel-no-style
+            ul#ull
   script(src='https://www.parsecdn.com/js/parse-1.2.18.min.js')
   script(src='js/non-empty.js')
   script(src='js/editProfile.js')
@@ -299,3 +306,7 @@ html(lang='en')
         }
       });
     }());
+    $(".carousel-no-style").jCarouselLite({
+      btnNext: ".next-no-style",
+      btnPrev: ".prev-no-style"
+    });

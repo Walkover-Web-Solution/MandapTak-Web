@@ -192,11 +192,23 @@ function  seeImages()
     if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
         document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
     }
+
+    //for slider jcarouselLite
+    var html="";
+
+
     Parse.Cloud.run("getImages",{profileId:selectedProfile.id},{
         success: function (result) {
             imageObjcets=result;
             imageObjectsLen=result.length;
             //get all the objects having profileId equal to selectedprofile
+            for(var i=0;i<result.length;i++)
+            {
+                html+="<li><img src='";
+                html+=result[i].get("file")._url+"'";
+                html+=" style='width:270px;height:270px;'></li>";
+            }//
+            document.getElementById("ull").innerHTML=html;
         },
         error:function(error){
         }
