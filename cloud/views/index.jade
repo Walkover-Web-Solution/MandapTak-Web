@@ -259,20 +259,18 @@ html(lang='en')
     // /.modal
     // Modal
     #seeImages.modal.fade(role='dialog')
-      .modal-dialog.modal-lg
+      .modal-dialog.modal-md
         // Modal content
         .modal-content
           .modal-header
             button.close(type='button', data-dismiss='modal') ×
           #imageBody.modal-body
-            // &lt;!&ndash;<img width="270" src="http://files.parsetfss.com/bf1cef06-c333-4108-a908-b6a35d80542a/tfss-e8a06922-6103-4b47-95d8-23817c60a8a6-cropped.jpg" />&ndash;&gt;
             img#previewMyImage(width='270', src='#')
             .modal-footer
               input#imageNumber.form-control(type='hidden', value='1')
               button#myBtn1.btn.btn-default(type='button', onclick='getImages(0)') Prev
               button#myBtn2.btn.btn-default(type='button', onclick='getImages(1)') Next
               button.btn.btn-default(type='button', data-dismiss='modal') Close
-              | -->
   script(src='https://www.parsecdn.com/js/parse-1.2.18.min.js')
   script(src='js/non-empty.js')
   script(src='js/editProfile.js')
