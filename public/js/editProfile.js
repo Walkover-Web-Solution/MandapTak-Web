@@ -227,7 +227,7 @@ function getImages(prevOrNext){
         document.getElementById("myBtn1").disabled = false;
         document.getElementById("myBtn2").disabled = false;
     }
-    if(prevOrNext==1 && imageObjectsLen!=1)
+    if(prevOrNext==1)
     {
 
         if(ino<imageObjectsLen && imageObjcets[ino].get("file")!=undefined && imageObjcets[ino].get("file")!=null && imageObjcets[ino].get("file")!="undefined") {
@@ -236,12 +236,12 @@ function getImages(prevOrNext){
             document.getElementById("imageNumber").value=ino+1;
         }
     }
-    else if(prevOrNext==0 && imageObjectsLen!=1)
+    else if(prevOrNext==0)
     {
 
         if(ino>1 && imageObjcets[ino-1].get("file")!=undefined && imageObjcets[ino-1].get("file")!=null && imageObjcets[ino-1].get("file")!="undefined") {
             document.getElementById("previewMyImage").src = imageObjcets[ino-1].get("file")._url;
-            imageObjectToDelete=imageObjcets[ino].get("file")._url;
+            imageObjectToDelete=imageObjcets[ino-1].get("file")._url;
             document.getElementById("imageNumber").value=ino-1;
         }
     }
