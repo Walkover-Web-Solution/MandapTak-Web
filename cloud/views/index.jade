@@ -267,6 +267,7 @@ html(lang='en')
           #imageBody.modal-body
             img#previewMyImage(width='270', src='#')
             .modal-footer
+              input#toDeleteImage.form-control(type='button', onclick='toDeleteAnImage()')
               input#imageNumber.form-control(type='hidden', value='1')
               button#myBtn1.btn.btn-default(type='button', onclick='getImages(0)') Prev
               button#myBtn2.btn.btn-default(type='button', onclick='getImages(1)') Next
