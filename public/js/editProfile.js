@@ -4,7 +4,7 @@
 var selectedProfile, uid, count = 0, order = 0;
 var picFile;
 var currentPageNo;
-
+var imageObjcets,imageObjectsLen= 0,imageObjectToDelete,ino;
 Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
 //Parse.initialize("XQA3RRfnMim2IyheuTBRkKZNRurkTNhxEiqa8Bs8", "VLxlMCuZd4VMyoSXjoLm621gk9RFURUyj93K8ULm");
 function jsfunction(operation) {
@@ -126,6 +126,8 @@ function addZero(i) {
 }
 function editProfile(profile) {
     var dateSet;
+    document.getElementById("imageNumber").value=1;
+    ino=1; //
     console.log(profile.objectId);
     var objectId = profile.objectId;
 
@@ -185,13 +187,11 @@ function editProfile(profile) {
 
 }
 
-var imageObjcets,imageObjectsLen= 0,imageObjectToDelete,ino;
 
 function  seeImages()
 {
     //document.getElementById("imageNumber").value=1;
     imageObjectsLen=0;
-    ino=1;
     console.log("Selected Profile is "+selectedProfile.id);
     if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
         document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
@@ -200,6 +200,7 @@ function  seeImages()
         success: function (result) {
             imageObjcets=result;
             imageObjectsLen=result.length;
+            ino=1;
             alert(result.length);
 
         },
@@ -210,6 +211,7 @@ function  seeImages()
 function getImages(prevOrNext){
     var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
     ino=imageNumber;
+    alert(imageObjectsLen+" "+ino);
     if(imageObjectsLen==1)
     {
         document.getElementById("myBtn1").disabled = true;
@@ -273,7 +275,10 @@ function toDeleteAnImage()
         }
     });
 }
-
+function resetImageNumber()
+{
+    ino=1;
+}
 var doweUpdateAnything = false;
 function saveProfile() {
     doweUpdateAnything = true;
