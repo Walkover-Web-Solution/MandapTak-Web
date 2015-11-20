@@ -207,7 +207,12 @@ function  seeImages()
 function getImages(prevOrNext){
     var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
     var ino=imageNumber;
-    if(ino==imageObjectsLen-1){
+    if(imageObjectsLen==1)
+    {
+        document.getElementById("myBtn1").disabled = true;
+        document.getElementById("myBtn2").disabled = true;
+    }
+    else if(ino==imageObjectsLen-1){
         document.getElementById("myBtn2").disabled = true;
         document.getElementById("myBtn1").disabled = false;
     }
@@ -240,9 +245,18 @@ function getImages(prevOrNext){
 }
 function toDeleteAnImage()
 {
+    if(imageObjectsLen==1)
+    {
+        alert("can not delete primary image");
+    }
     Parse.Cloud.run("deleteImages",{profileId:selectedProfile.id,imageObjectToDelete:imageObjectToDelete},{
         success: function (result) {
-            alert("Image deleted");
+            //alert("Image deleted");
+            imageObjectsLen--;
+            if(ino<imageObjectsLen-1)
+            getImages(1);
+            else
+            getImages(0);
         },
         error:function(error){
             alert("can not delete this image");
