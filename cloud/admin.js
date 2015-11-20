@@ -572,17 +572,23 @@ Parse.Cloud.define("deleteImages", function (request,response) {
     var query = new Parse.Query(invFriend);
     query.equalTo("profileId",pid);
     query.notEqualTo("isPrimary",true);
-    query.destroy({
-        success: function(myObject) {
-            conole.log("image deleted successfully");
-            response.success("deleted");
+    var query = new Parse.Query(myObject);
+    query.equalTo("objectId", "XXXXX");
+    query.find({
+        success: function(result) {
+            result.destroy({
+                success: function(object) {
+                    alert('Delete Successful');
+                },
+                error: function(object, error) {
+                    alert('Delete failed');
+                }
+            });
         },
-        error: function(myObject, error) {
-            // The delete failed.
-            // error is a Parse.Error with an error code and message.
-            console.log("could not delete image");
-            response.error(error.message);
+        error: function(error) {
+            alert('Error in delete query');
         }
     });
+    
 });
 //added by Utkarsh
