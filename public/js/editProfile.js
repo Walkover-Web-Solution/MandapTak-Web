@@ -201,8 +201,6 @@ function  seeImages()
             imageObjcets=result;
             imageObjectsLen=result.length;
             ino=1;
-            alert(result.length);
-
         },
         error:function(error){
         }
@@ -211,13 +209,7 @@ function  seeImages()
 function getImages(prevOrNext){
     var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
     ino=imageNumber;
-    alert(imageObjectsLen+" "+ino);
-    if(imageObjectsLen==1)
-    {
-        document.getElementById("myBtn1").disabled = true;
-        document.getElementById("myBtn2").disabled = true;
-    }
-    else if(ino==imageObjectsLen){
+   if(ino==imageObjectsLen){
         document.getElementById("myBtn2").disabled = true;
         document.getElementById("myBtn1").disabled = false;
     }
