@@ -184,6 +184,17 @@ function editProfile(profile) {
     );
 
 }
+function toDeleteAnImage()
+{
+    Parse.Cloud.run("deleteImages",{profileId:selectedProfile.id},{
+        success: function (result) {
+            alert("Image deleted");
+        },
+        error:function(error){
+            alert("Deleting image not working with error message:"+error.message)
+        }
+    });
+}
 var imageObjcets,imageObjectsLen=0;
 function  seeImages()
 {
