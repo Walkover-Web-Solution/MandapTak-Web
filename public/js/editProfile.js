@@ -198,6 +198,7 @@ function  seeImages()
         success: function (result) {
             imageObjcets=result;
             imageObjectsLen=result.length;
+            alert(result.length);
 
         },
         error:function(error){
