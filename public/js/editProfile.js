@@ -184,18 +184,9 @@ function editProfile(profile) {
     );
 
 }
-function toDeleteAnImage()
-{
-    Parse.Cloud.run("deleteImages",{profileId:selectedProfile.id},{
-        success: function (result) {
-            alert("Image deleted");
-        },
-        error:function(error){
-            alert("Deleting image not working with error message:"+error.message)
-        }
-    });
-}
-var imageObjcets,imageObjectsLen=0;
+
+var imageObjcets,imageObjectsLen= 0,imageObjectToDelete;
+
 function  seeImages()
 {
     //document.getElementById("imageNumber").value=1;
@@ -233,6 +224,7 @@ function getImages(prevOrNext){
 
         if(ino<imageObjectsLen && imageObjcets[ino].get("file")!=undefined && imageObjcets[ino].get("file")!=null && imageObjcets[ino].get("file")!="undefined") {
             document.getElementById("previewMyImage").src = imageObjcets[ino].get("file")._url;
+            imageObjectToDelete=imageObjcets[ino].id;
             document.getElementById("imageNumber").value=ino+1;
         }
     }
@@ -241,10 +233,23 @@ function getImages(prevOrNext){
 
         if(ino>1 && imageObjcets[ino-1].get("file")!=undefined && imageObjcets[ino-1].get("file")!=null && imageObjcets[ino-1].get("file")!="undefined") {
             document.getElementById("previewMyImage").src = imageObjcets[ino-1].get("file")._url;
+            imageObjectToDelete=imageObjcets[ino].get("file")._url;
             document.getElementById("imageNumber").value=ino-1;
         }
     }
 }
+function toDeleteAnImage()
+{
+    Parse.Cloud.run("deleteImages",{profileId:selectedProfile.id,imageObjectToDelete:imageObjectToDelete},{
+        success: function (result) {
+            alert("Image deleted");
+        },
+        error:function(error){
+            alert("can not delete this image");
+        }
+    });
+}
+
 var doweUpdateAnything = false;
 function saveProfile() {
     doweUpdateAnything = true;

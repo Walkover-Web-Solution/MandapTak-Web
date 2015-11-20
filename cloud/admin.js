@@ -568,8 +568,10 @@ Parse.Cloud.define("getImages", function (request,response) {
 Parse.Cloud.define("deleteImages", function (request,response) {
     Parse.Cloud.useMasterKey();
     var pid=request.params.profileId;
+    var imageObjectToDelete=request.params.imageObjectToDelete;
     var query = new Parse.Query("Photo");
     query.equalTo("profileId",{"__type": "Pointer", "className": "Profile", "objectId": pid});
+    query.equalTo("objectId",imageObjectToDelete);
     query.notEqualTo("isPrimary",true);
     query.find({
         success: function(result) {
