@@ -585,6 +585,7 @@ Parse.Cloud.define("deleteImages", function (request,response) {
             });
         },
         error: function(error) {
+            response.error(error);
             alert('Error in delete query');
         }
     });
