@@ -568,15 +568,12 @@ Parse.Cloud.define("getImages", function (request,response) {
 Parse.Cloud.define("deleteImages", function (request,response) {
     Parse.Cloud.useMasterKey();
     var pid=request.params.profileId;
-    var invFriend = Parse.Object.extend("Photo");
-    var query = new Parse.Query(invFriend);
+    var query = new Parse.Query("Photo");
     query.equalTo("profileId",pid);
     query.notEqualTo("isPrimary",true);
-    var query = new Parse.Query(myObject);
-    query.equalTo("objectId", "XXXXX");
     query.find({
         success: function(result) {
-            result.destroy({
+            result[0].destroy({
                 success: function(object) {
                     alert('Delete Successful');
                 },
@@ -589,6 +586,6 @@ Parse.Cloud.define("deleteImages", function (request,response) {
             alert('Error in delete query');
         }
     });
-    
+
 });
 //added by Utkarsh
