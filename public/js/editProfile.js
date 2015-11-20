@@ -215,7 +215,7 @@ function getImages(prevOrNext){
         document.getElementById("myBtn1").disabled = true;
         document.getElementById("myBtn2").disabled = true;
     }
-    else if(ino==imageObjectsLen-1){
+    else if(ino==imageObjectsLen){
         document.getElementById("myBtn2").disabled = true;
         document.getElementById("myBtn1").disabled = false;
     }
