@@ -576,8 +576,10 @@ Parse.Cloud.define("deleteImages", function (request,response) {
             result[0].destroy({
                 success: function(object) {
                     alert('Delete Successful');
+                    response.success("deleted");
                 },
                 error: function(object, error) {
+                    response.error(error);
                     alert('Delete failed');
                 }
             });
