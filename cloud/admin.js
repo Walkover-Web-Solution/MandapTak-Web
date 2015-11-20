@@ -565,27 +565,24 @@ Parse.Cloud.define("getImages", function (request,response) {
         response.success(result);
     });
 });
-//
-//Parse.Cloud.define("changeUserNameAndUserRelation1",function(request,response){
-//    var userId=request.params.userId;
-//    var profileId=request.params.profileId;
-//    var username=request.params.username;
-//    var relation=request.params.relation;
-//    Parse.Cloud.useMasterKey();
-//    var query=new Parse.Query("UserProfile");
-//    query.include();
-//    query.equalTo("userId",{"__type": "Pointer", "className": "_User", "objectId": userId});
-//    query.equalTo("profileId",{"__type": "Pointer", "className": "Profile", "objectId": profileId});
-//    query.find().then(function (result) {
-//        result[0].set("relation",relation);
-//        result[0].save(null, {
-//            success: function (user) {
-//
-//            },
-//            error: function (user, error) {
-//                response.error("can not change relation with error code :"+error)
-//            }
-//        });
-//    });
-//});
+Parse.Cloud.define("deleteImages", function (request,response) {
+    Parse.Cloud.useMasterKey();
+    var pid=request.params.profileId;
+    var invFriend = Parse.Object.extend("Photo");
+    var query = new Parse.Query(invFriend);
+    query.equalTo("profileId",pid);
+    query.notEqualTo("isPrimary",true);
+    query.destroy({
+        success: function(myObject) {
+            conole.log("image deleted successfully");
+            response.success("deleted");
+        },
+        error: function(myObject, error) {
+            // The delete failed.
+            // error is a Parse.Error with an error code and message.
+            console.log("could not delete image");
+            response.error(error.message);
+        }
+    });
+});
 //added by Utkarsh

@@ -5,8 +5,8 @@ var selectedProfile, uid, count = 0, order = 0;
 var picFile;
 var currentPageNo;
 
-//Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
-Parse.initialize("XQA3RRfnMim2IyheuTBRkKZNRurkTNhxEiqa8Bs8", "VLxlMCuZd4VMyoSXjoLm621gk9RFURUyj93K8ULm");
+Parse.initialize("Uj7WryNjRHDQ0O3j8HiyoFfriHV8blt2iUrJkCN0", "owBEWHkWBEEmmaukvUiKSOJhuSaQcOrKqhzqGNyi");
+//Parse.initialize("XQA3RRfnMim2IyheuTBRkKZNRurkTNhxEiqa8Bs8", "VLxlMCuZd4VMyoSXjoLm621gk9RFURUyj93K8ULm");
 function jsfunction(operation) {
     profileCount(order);
     var val = document.getElementById("pageno").value;
