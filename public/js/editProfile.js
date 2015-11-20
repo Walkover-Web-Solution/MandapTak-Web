@@ -185,7 +185,7 @@ function editProfile(profile) {
 
 }
 
-var imageObjcets,imageObjectsLen= 0,imageObjectToDelete;
+var imageObjcets,imageObjectsLen= 0,imageObjectToDelete,ino;
 
 function  seeImages()
 {
@@ -206,7 +206,7 @@ function  seeImages()
 }
 function getImages(prevOrNext){
     var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
-    var ino=imageNumber;
+    ino=imageNumber;
     if(imageObjectsLen==1)
     {
         document.getElementById("myBtn1").disabled = true;
@@ -254,9 +254,16 @@ function toDeleteAnImage()
             //alert("Image deleted");
             imageObjectsLen--;
             if(ino<imageObjectsLen-1)
-            getImages(1);
-            else
-            getImages(0);
+            {
+                document.getElementById("imageNumber").value=ino;
+                getImages(1);
+            }
+            else if(ino>1)
+            {
+                document.getElementById("imageNumber").value=ino-1;
+                getImages(0);
+            }
+
         },
         error:function(error){
             alert("can not delete this image");
