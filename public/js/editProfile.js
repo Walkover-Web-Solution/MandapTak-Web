@@ -246,26 +246,29 @@ function toDeleteAnImage()
     {
         alert("can not delete primary image");
     }
-    Parse.Cloud.run("deleteImages",{profileId:selectedProfile.id,imageObjectToDelete:imageObjectToDelete},{
-        success: function (result) {
-            //alert("Image deleted");
-            imageObjectsLen--;
-            if(ino<imageObjectsLen-1)
-            {
-                document.getElementById("imageNumber").value=ino;
-                getImages(1);
-            }
-            else if(ino>1)
-            {
-                document.getElementById("imageNumber").value=ino-1;
-                getImages(0);
-            }
-
-        },
-        error:function(error){
-            alert("can not delete this image");
+    else {
+        if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
+            document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
         }
-    });
+        Parse.Cloud.run("deleteImages", {profileId: selectedProfile.id, imageObjectToDelete: imageObjectToDelete}, {
+            success: function (result) {
+                //alert("Image deleted");
+                imageObjectsLen--;
+                if (ino < imageObjectsLen - 1) {
+                    document.getElementById("imageNumber").value = ino;
+                    getImages(1);
+                }
+                else if (ino > 1) {
+                    document.getElementById("imageNumber").value = ino - 1;
+                    getImages(0);
+                }
+
+            },
+            error: function (error) {
+                alert("can not delete this image");
+            }
+        });
+    }
 }
 function resetImageNumber()
 {
