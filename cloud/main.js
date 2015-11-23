@@ -109,7 +109,7 @@ Parse.Cloud.define("likeAndFind", function (request, response) {
                                     alert: userName + " liked you back!",
                                     username: userName,
                                     profileid: userProfileid,
-                                    badge: 1
+                                    badge: "Increment"
                                 }
                             }, {
                                 success: function (result) {
