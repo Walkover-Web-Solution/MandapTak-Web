@@ -206,8 +206,9 @@ function  seeImages()
         }
     });
 }
+var imageNumber=parseInt(document.getElementById("imageNumber").value);
 function getImages(prevOrNext){
-    var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
+    //var imageNumber=parseInt(document.getElementById("imageNumber").value);
     ino=imageNumber;
    if(ino==imageObjectsLen){
         document.getElementById("myBtn2").disabled = true;
@@ -224,19 +225,21 @@ function getImages(prevOrNext){
     if(prevOrNext==1)
     {
 
-        if(ino<imageObjectsLen && imageObjcets[ino].get("file")!=undefined && imageObjcets[ino].get("file")!=null && imageObjcets[ino].get("file")!="undefined") {
-            document.getElementById("previewMyImage").src = imageObjcets[ino].get("file")._url;
-            imageObjectToDelete=imageObjcets[ino].id;
-            document.getElementById("imageNumber").value=ino+1;
+        if(ino<=imageObjectsLen && imageObjcets[ino-1].get("file")!=undefined && imageObjcets[ino-1].get("file")!=null && imageObjcets[ino-1].get("file")!="undefined") {
+            document.getElementById("previewMyImage").src = imageObjcets[ino-1].get("file")._url;
+            imageObjectToDelete=imageObjcets[ino-1].id;
+            ino+=1;
+            //document.getElementById("imageNumber").value=ino+1;
         }
     }
     else if(prevOrNext==0)
     {
 
-        if(ino>1 && imageObjcets[ino-1].get("file")!=undefined && imageObjcets[ino-1].get("file")!=null && imageObjcets[ino-1].get("file")!="undefined") {
+        if(ino>1 && imageObjcets[ino-2].get("file")!=undefined && imageObjcets[ino-2].get("file")!=null && imageObjcets[ino-2].get("file")!="undefined") {
             document.getElementById("previewMyImage").src = imageObjcets[ino-1].get("file")._url;
-            imageObjectToDelete=imageObjcets[ino-1].get("file")._url;
-            document.getElementById("imageNumber").value=ino-1;
+            imageObjectToDelete=imageObjcets[ino-2].get("file")._url;
+            ino-=1;
+            //document.getElementById("imageNumber").value=ino-1;
         }
     }
 }
@@ -249,19 +252,20 @@ function toDeleteAnImage()
     else {
         if(selectedProfile.get("profilePic")!=undefined && selectedProfile.get("profilePic")!=null && selectedProfile.get("profilePic")!="undefined") {
             document.getElementById("previewMyImage").src = selectedProfile.get("profilePic")._url;
+            imageObjcets
         }
         Parse.Cloud.run("deleteImages", {profileId: selectedProfile.id, imageObjectToDelete: imageObjectToDelete}, {
             success: function (result) {
                 //alert("Image deleted");
                 imageObjectsLen--;
-                if (ino < imageObjectsLen - 1) {
-                    document.getElementById("imageNumber").value = ino;
-                    getImages(1);
-                }
-                else if (ino > 1) {
-                    document.getElementById("imageNumber").value = ino - 1;
-                    getImages(0);
-                }
+                //if (ino < imageObjectsLen - 1) {
+                //    document.getElementById("imageNumber").value = ino;
+                //    getImages(1);
+                //}
+                //else if (ino > 1) {
+                //    document.getElementById("imageNumber").value = ino - 1;
+                //    getImages(0);
+                //}
 
             },
             error: function (error) {
