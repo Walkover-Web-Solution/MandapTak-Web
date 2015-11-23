@@ -224,7 +224,7 @@ function getImages(prevOrNext){
     if(prevOrNext==1)
     {
 
-        if(ino<=imageObjectsLen && imageObjcets[ino].get("file")!=undefined && imageObjcets[ino].get("file")!=null && imageObjcets[ino].get("file")!="undefined") {
+        if(ino<imageObjectsLen && imageObjcets[ino].get("file")!=undefined && imageObjcets[ino].get("file")!=null && imageObjcets[ino].get("file")!="undefined") {
             document.getElementById("previewMyImage").src = imageObjcets[ino].get("file")._url;
             imageObjectToDelete=imageObjcets[ino].id;
             document.getElementById("imageNumber").value=ino+1;
