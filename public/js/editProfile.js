@@ -254,14 +254,14 @@ function toDeleteAnImage()
             success: function (result) {
                 //alert("Image deleted");
                 imageObjectsLen--;
-                if (ino < imageObjectsLen - 1) {
-                    document.getElementById("imageNumber").value = ino;
-                    getImages(1);
-                }
-                else if (ino > 1) {
-                    document.getElementById("imageNumber").value = ino - 1;
-                    getImages(0);
-                }
+                //if (ino < imageObjectsLen - 1) {
+                //    document.getElementById("imageNumber").value = ino;
+                //    getImages(1);
+                //}
+                //else if (ino > 1) {
+                //    document.getElementById("imageNumber").value = ino - 1;
+                //    getImages(0);
+                //}
 
             },
             error: function (error) {
