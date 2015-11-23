@@ -201,6 +201,7 @@ function  seeImages()
             imageObjcets=result;
             imageObjectsLen=result.length;
             ino=1;
+            alert(result.length);
         },
         error:function(error){
         }
