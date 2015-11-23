@@ -570,21 +570,25 @@ Parse.Cloud.define("deleteImages", function (request,response) {
     var pid=request.params.profileId;
     var imageObjectToDelete=request.params.imageObjectToDelete;
     var query = new Parse.Query("Photo");
-    query.equalTo("profileId",{"__type": "Pointer", "className": "Profile", "objectId": pid});
+    //query.equalTo("profileId",{"__type": "Pointer", "className": "Profile", "objectId": pid});
     query.equalTo("objectId",imageObjectToDelete);
     query.notEqualTo("isPrimary",true);
     query.find({
         success: function(result) {
-            result[0].destroy({
-                success: function(object) {
-                    alert('Delete Successful');
-                    response.success("deleted");
-                },
-                error: function(object, error) {
-                    response.error(error);
-                    alert('Delete failed');
-                }
-            });
+            if(result.length>0) {
+                result[0].destroy({
+                    success: function (object) {
+                        alert('Delete Successful');
+                        response.success("deleted");
+                    },
+                    error: function (object, error) {
+                        response.error(error);
+                        alert('Delete failed');
+                    }
+                });
+            }
+            else
+            response.error(error.message);
         },
         error: function(error) {
             response.error(error);
