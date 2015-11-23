@@ -206,9 +206,8 @@ function  seeImages()
         }
     });
 }
-var imageNumber=parseInt(document.getElementById("imageNumber").value);
 function getImages(prevOrNext){
-    //var imageNumber=parseInt(document.getElementById("imageNumber").value);
+    var imageNumber=parseInt(document.getElementById("imageNumber").value);
     ino=imageNumber;
    if(ino==imageObjectsLen){
         document.getElementById("myBtn2").disabled = true;
