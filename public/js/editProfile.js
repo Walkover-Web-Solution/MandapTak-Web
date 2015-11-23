@@ -229,17 +229,17 @@ function getImages(prevOrNext){
             document.getElementById("previewMyImage").src = imageObjcets[ino-1].get("file")._url;
             imageObjectToDelete=imageObjcets[ino-1].id;
             ino+=1;
-            //document.getElementById("imageNumber").value=ino+1;
+            document.getElementById("imageNumber").value=ino+1;
         }
     }
     else if(prevOrNext==0)
     {
 
         if(ino>1 && imageObjcets[ino-2].get("file")!=undefined && imageObjcets[ino-2].get("file")!=null && imageObjcets[ino-2].get("file")!="undefined") {
-            document.getElementById("previewMyImage").src = imageObjcets[ino-1].get("file")._url;
+            document.getElementById("previewMyImage").src = imageObjcets[ino-2].get("file")._url;
             imageObjectToDelete=imageObjcets[ino-2].get("file")._url;
             ino-=1;
-            //document.getElementById("imageNumber").value=ino-1;
+            document.getElementById("imageNumber").value=ino-1;
         }
     }
 }
