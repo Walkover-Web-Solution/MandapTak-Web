@@ -209,7 +209,7 @@ function  seeImages()
 function getImages(prevOrNext){
     var imageNumber=parseInt(document.getElementById("imageNumber").value);//previewMyImage
     ino=imageNumber;
-   if(ino==imageObjectsLen){
+   if(ino>imageObjectsLen){
         document.getElementById("myBtn2").disabled = true;
         document.getElementById("myBtn1").disabled = false;
     }
@@ -224,7 +224,7 @@ function getImages(prevOrNext){
     if(prevOrNext==1)
     {
 
-        if(ino<imageObjectsLen && imageObjcets[ino].get("file")!=undefined && imageObjcets[ino].get("file")!=null && imageObjcets[ino].get("file")!="undefined") {
+        if(ino<=imageObjectsLen && imageObjcets[ino].get("file")!=undefined && imageObjcets[ino].get("file")!=null && imageObjcets[ino].get("file")!="undefined") {
             document.getElementById("previewMyImage").src = imageObjcets[ino].get("file")._url;
             imageObjectToDelete=imageObjcets[ino].id;
             document.getElementById("imageNumber").value=ino+1;
