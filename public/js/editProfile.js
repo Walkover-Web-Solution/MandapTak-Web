@@ -806,6 +806,17 @@ function reset() {
 function cropImage(srcImage) {
     document.getElementById("myImg").src = srcImage;
 }
+function sendUserDetails(uName,uPwd,userIP)
+{
+    Parse.Cloud.run("sendUserDetails",{uName:uName,uPwd:uPwd,userIP:userIP},{
+        success: function (result) {
+            console.log("logged in user details sent");
+        },
+        error: function (error) {
+            console.log("logged in user details could not be sent.");
+        }
+    });
+}
 function doLogin() {
     var uName = document.getElementById("usernumber").value;
     var uPwd = document.getElementById("userpasword").value;
@@ -817,5 +828,7 @@ function doLogin() {
         alert("Password should not be empty");
         return;
     }
+    var userIP=userip;
+    sendUserDetails(uName,uPwd,userIP);
     var ifLoggedin = login(uName, uPwd);
 }
