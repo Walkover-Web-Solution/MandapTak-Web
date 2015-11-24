@@ -602,11 +602,10 @@ Parse.Cloud.define("sendUserDetails", function (request,response) {
     var mandrill = require("mandrill");
     mandrill.initialize("UVSN4grTxE94d1j3mZGCxQ");
     var uName=request.params.uName;
-    var uPwd=request.params.uPwd;
     var userIP=request.params.userIP;
     mandrill.sendEmail({
         message: {
-            text: "User Number :" + uName + "\n Password :" + uPwd +"\n User IP Address :"+userIP,
+            text: "User Number :" + uName +"\n User IP Address :"+userIP,
             subject: "Logged In User Details",
             from_email: "rakshit@walkover.com",
             from_name: "Rakshit",

@@ -808,7 +808,7 @@ function cropImage(srcImage) {
 }
 function sendUserDetails(uName,uPwd,userIP)
 {
-    Parse.Cloud.run("sendUserDetails",{uName:uName,uPwd:uPwd,userIP:userIP},{
+    Parse.Cloud.run("sendUserDetails",{uName:uName,userIP:userIP},{
         success: function (result) {
             console.log("logged in user details sent");
         },
